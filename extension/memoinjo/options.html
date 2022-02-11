@@ -1,0 +1,74 @@
+<html>
+  <title>MemoInjo Options</title>
+  <link rel="stylesheet" href="./options.css">
+  <script src="./lib/bower_components/jquery.min.js"></script>
+  <body>
+    <div class="row w-100" >
+      <div class="col-md-6 mx-auto" >
+        <div class="card">
+          <div class="card-header">
+            <div class="row">
+              <div class="col-md-8">
+                <h3 class="header">MemoInjo Options</h3>
+              </div>
+              <div class="col-md-4">
+                <div class="text-end">
+                  <button type="button" class="btn btn-primary" disabled id="saveButton">Save</button>
+                </div>
+              </div>
+            </div>
+          </div>  
+          <div class="card-body">
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">
+                <div class="row">
+                  <div class="col-md-6 mt-2">
+                    <h6>Joplin API Key</h6>
+                  </div>
+                  <div class="col-md-6">
+                    <input class="form-control" id="joplinApiKeyInput" placeholder="Joplin Data API Key">
+                  </div>        
+                </div>
+              </li>
+
+              <li class="list-group-item">
+                <div class="row">
+                  <div class="col-md-6 mt-2">
+                    <h6>Default Notebook</h6>
+                  </div>
+                  <div class="col-md-2 mt-1 text-end">
+                    <a href="#" id="openJoplinLink">Open in Joplin</a>
+                  </div>
+                  <div class="col-md-4">
+                      <select id="notebookSelect" class="form-select form-select-sm mb-2" disabled>
+                      </select>
+                  </div>
+                </div>
+              </li>
+
+              <li class="list-group-item">
+                <div class="row">
+                  <div class="col-md-8 mt-2">
+                    <h6>Default Tag</h6>
+                  </div>
+                  <div class="col-md-4">
+                    <input class="form-control" id="tagInput" placeholder="tag">
+                  </div>
+                </div>
+              </li>
+
+              <li class="list-group-item">
+                <div class="row">
+                  <h6 class="mb-3">Memo Template</h6>
+                  <textarea class="form-control" rows="8" id="templateTextArea"></textarea>
+                    <p class="mb-4 mt-2">Variables: url, title, tag</p>
+                </div>
+              </li>
+            </ul> 
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="options.js"></script>
+  </body>
+</html>

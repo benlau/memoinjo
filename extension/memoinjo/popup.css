@@ -1,0 +1,39 @@
+@import url('./lib/bower_components/bootstrap.min.css');
+
+html {
+  min-width: 400px;
+  min-height: 380px;
+  padding: 8px;
+}
+
+.disabled {
+  opacity: 0.5;
+}
+
+#launchButton {
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+#noteEditor {
+  min-width: 200px;
+  min-height: 240px;
+  max-height: 450px;
+  margin-top: 8px;
+}
+
+#launchButton a:link {
+  text-decoration: none;
+}
+
+#launchButton a:visited {
+  text-decoration: none;
+}
+
+#launchButton a:hover {
+  text-decoration: none;
+}
+
+#launchButton a:active {
+  text-decoration: none;
+}

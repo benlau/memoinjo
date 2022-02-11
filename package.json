@@ -1,0 +1,25 @@
+{
+  "name": "memoinjo",
+  "version": "1.0.0",
+  "description": "Stick memo on any website and sync via Joplin",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --silent false --verbose false",
+    "test:watch": "jest --watch --silent false --verbose false",
+    "lint": "eslint . --ext .js",
+    "lint:fix": "eslint . --ext .js --fix"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.16.12",
+    "@babel/eslint-parser": "^7.17.0",
+    "@babel/preset-env": "^7.16.11",
+    "babel-jest": "^27.4.6",
+    "eslint": "^8.8.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.25.4",
+    "jest": "^27.4.7",
+    "jest-fetch-mock": "^3.0.3"
+  }
+}

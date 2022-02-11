@@ -1,0 +1,32 @@
+{
+  "root": true,
+  "env": {
+    "es2021": true,
+    "jest": true,
+    "browser": true,
+    "webextensions": true,
+    "jquery": true
+  },
+  "parserOptions": {
+    "sourceType": "module"
+  },  
+  "parser": "@babel/eslint-parser",
+  "plugins": [
+  ],
+  "extends": [
+    "airbnb-base"
+  ],
+  "rules": {
+    "indent": ["error", 4],
+    "quotes": [2, "double"],
+    "import/extensions": [
+      2, {
+        "js": "always"
+      }
+    ],
+    "no-promise-executor-return": 0,
+    "consistent-return": 0,
+    "no-await-in-loop": 0,
+    "no-continue": 0
+  }
+}

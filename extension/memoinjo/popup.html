@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>MemoInjo</title>
+    <link rel="stylesheet" href="popup.css">
+    <script src="./lib/bower_components/jquery.min.js"></script>
+  </head>
+  <body>
+    <div id="wizard" class="d-none">
+      <h2>Permission Needed</h2>
+      <p>
+        In order to access your data in Joplin, it needs your authorization. 
+        Please <a href="joplin://x-callback-url/openNote?id=none">open</a> the Joplin desktop application and grant the permission. 
+      </p>
+    </div>
+    <div id="joplinWebClipperNotAvailable" class="d-none">
+      <h2>Unable to connect to Joplin Web Clipper</h2>
+      <p>
+        Please ensure that the Joplin Desktop is started and that the clipper service is enabled in the configuration.
+      </p>
+      <p class="mt-2">
+        <a href="https://joplinapp.org/clipper/">More info</a>
+      </p>
+    </div>
+    <div id="status"></div>
+    <div id="editor" class="d-none disabled">
+
+      <div id="launchButton" class="text-start">
+        <a id="launchButtonLink" href="#">Open in Joplin</a>
+      </div>
+
+      <select id="notebookSelect" class="form-select form-select-sm mb-2" disabled>
+      </select>
+
+      <input class="form-control" id="titleInput" placeholder="" disabled>
+
+      <textarea class="form-control" id="noteEditor" disabled></textarea>
+    </div>
+    <div id="errorPanel" class="d-none">
+      <h2 class="mb-2">Error</h2>
+      <pre><code id="errorMessage"></code></pre>
+    </div>
+    <script type="module" src="popup.js"></script>
+  </body>
+</html>

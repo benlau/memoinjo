@@ -1,0 +1,21 @@
+{
+  "name": "memoinjo",
+  "description": "",
+  "main": "index.js",
+  "authors": [
+    "Ben Lau <xbenlau@gmail.com>"
+  ],
+  "license": "ISC",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^3.6.0",
+    "bootstrap": "^5.1.3"
+  }
+}
