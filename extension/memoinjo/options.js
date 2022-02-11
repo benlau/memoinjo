@@ -44,7 +44,7 @@ async function updateNotebooks() {
         notebookSelect.empty();
         notebookSelect.append("<option>Unavailable</option>");
         notebookSelect.prop("disabled", true);
-        openJoplinLink.attr("href", `joplin://x-callback-url/openFolder?id=`);
+        openJoplinLink.attr("href", "joplin://x-callback-url/openFolder?id=");
     }
 }
 
