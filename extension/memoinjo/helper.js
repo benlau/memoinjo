@@ -3,9 +3,12 @@ import Storage from "./storage.js";
 export function normalizeLink(link) {
     const forbiddedQuery = [
         "fbclid",
+        "gclid",
         "utm_source",
         "utm_medium",
         "utm_campaign",
+        "utm_term",
+        "utm_content",
     ];
     const url = new URL(link);
 
