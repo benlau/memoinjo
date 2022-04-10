@@ -1,4 +1,4 @@
-import { normalizeLink } from "../extension/memoinjo/helper.js";
+import { normalizeLink } from "../packages/memoinjo-core/helper.js";
 
 test("normalizeLink", () => {
     expect(

@@ -1,4 +1,4 @@
-import Renderer from "../extension/memoinjo/renderer.js";
+import Renderer from "../packages/memoinjo-core/renderer.js";
 
 test("Renderer.render", () => {
     const renderer = new Renderer();

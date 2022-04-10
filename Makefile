@@ -1,19 +1,36 @@
 
-ASSETS_PATH=extension/memoinjo/lib/bower_components
+MEMOINJO_CORE_PATH=${PWD}/packages/memoinjo-core
+ASSETS_PATH=${MEMOINJO_CORE_PATH}/lib/bower_components
 
-.PHONY: copy-assets
-copy-assets:
-	mkdir -p ${ASSETS_PATH}
-	cp bower_components/bootstrap/dist/css/bootstrap.min.css ${ASSETS_PATH}
-	cp bower_components/jquery/dist/jquery.min.js ${ASSETS_PATH}
 
 .PHONY: install
 install:
 	npm install
 	bower install
-	make copy-assets
 
 .PHONY: pack
 pack:
 	mkdir -p dist
-	(cd extension/memoinjo && zip -r ../../dist/memoinjo.zip .)
+	(cd target/memoinjo-chrome && zip -r ../../dist/memoinjo-chrome.zip .)
+	(cd target/memoinjo-firefox && zip -r ../../dist/memoinjo-firefox.zip .)
+
+.PHONY: bootstrap
+bootstrap: bootstrap-memoinjo-core bootstrap-memoinjo-firefox bootstrap-memoinjo-chrome
+
+.PHONY: bootstrap-memoinjo-core
+bootstrap-memoinjo-core:
+	mkdir -p ${ASSETS_PATH}
+	cp bower_components/bootstrap/dist/css/bootstrap.min.css ${ASSETS_PATH}
+	cp bower_components/jquery/dist/jquery.min.js ${ASSETS_PATH}
+
+.PHONY: bootstrap-memoinjo-firefox
+bootstrap-memoinjo-firefox:
+	mkdir -p target/memoinjo-firefox/memoinjo
+	cp -R ${MEMOINJO_CORE_PATH}/. target/memoinjo-firefox/memoinjo
+
+.PHONE: bootstrap-memoinjo-chrome
+bootstrap-memoinjo-chrome:
+	ln -sfn ${MEMOINJO_CORE_PATH} ${PWD}/target/memoinjo-chrome/memoinjo
+
+clean:
+	rm -f target/memoinjo-chrome/memoinjo

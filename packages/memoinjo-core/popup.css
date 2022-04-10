@@ -1,8 +1,8 @@
 @import url('./lib/bower_components/bootstrap.min.css');
 
-html {
+body {
   min-width: 400px;
-  min-height: 380px;
+  min-height: 380px; 
   padding: 8px;
 }
 

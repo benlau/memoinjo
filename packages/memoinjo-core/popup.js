@@ -6,6 +6,7 @@ import {
     hasNoValue, getSelectedNotebookId,
 } from "./helper.js";
 import "./lib/jquery.textarea_autosize.js";
+import BrowserService from "./browserservice.js";
 
 const titleInput = $("#titleInput");
 const wizard = $("#wizard");
@@ -16,6 +17,7 @@ const editor = $("#editor");
 
 const joplin = new JoplinDataApi();
 const renderer = new Renderer();
+const browserService = new BrowserService();
 
 async function showNotebooks(notebooks) {
     notebooks.forEach((notebook) => {
@@ -29,7 +31,7 @@ async function showNotebooks(notebooks) {
 }
 
 async function launchEditor() {
-    const [currentTab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    const [currentTab] = await browserService.queryTabs({ active: true, currentWindow: true });
     const {
         title,
     } = currentTab;

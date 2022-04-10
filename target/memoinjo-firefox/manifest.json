@@ -1,0 +1,35 @@
+{
+  "name": "MemoInjo",
+  "description": "Stick memo on any website and sync via Joplin",
+  "version": "0.1.2",
+  "manifest_version": 2,
+  "permissions": ["storage", "activeTab"],
+  "options_ui": {
+    "page": "memoinjo/options.html",
+    "browser_style": false
+  },
+  "browser_action": {
+    "default_icon": "memoinjo/icon128.png",
+    "default_popup": "memoinjo/popup.html",
+    "default_title" : "Stick memo"
+  },
+  "icons": { 
+    "128": "memoinjo/icon128.png"
+  },
+  "commands": {
+    "_execute_action": {
+      "suggested_key": {
+        "windows": "Alt+Shift+M",
+        "mac": "Ctrl+Shift+M",
+        "chromeos": "Alt+Shift+M",
+        "linux": "Alt+Shift+M" 
+      }
+    }
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "memoinjo@firefox",
+      "strict_min_version": "42.0"
+    }
+  }
+}

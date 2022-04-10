@@ -1,4 +1,4 @@
-import JoplinDataAPI from "../extension/memoinjo/joplindataapi.js";
+import JoplinDataAPI from "../packages/memoinjo-core/joplindataapi.js";
 
 beforeEach(() => {
     fetch.resetMocks();

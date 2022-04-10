@@ -2,7 +2,9 @@ name: Build
 
 on:
   push:
-    branches: main
+    branches: 
+    - main
+    - dev
   pull_request:
     branches: "*"
 
@@ -26,12 +28,17 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
-
-      - name: Install dependencies
+      - name: install dependencies
         run: |
-          npm install -g codecov
+          npm install -g bower
       - name: Test the extension
         run: |
-          npm install
+          make install
+          make bootstrap
           npm run test
           npm run lint
+          make pack
+      - uses: actions/upload-artifact@v3
+        with:
+          name: packages
+          path: dist/
