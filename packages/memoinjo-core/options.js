@@ -1,4 +1,4 @@
-import Storage from "./storage.js";
+import StorageService from "./services/storageservice.js";
 import JoplinDataApi from "./joplindataapi.js";
 import { getSelectedNotebookId, hasValue } from "./helper.js";
 import Constants from "./constants.js";
@@ -11,6 +11,7 @@ const notebookSelect = $("#notebookSelect");
 const openJoplinLink = $("#openJoplinLink");
 
 const joplin = new JoplinDataApi();
+const storageService = new StorageService();
 
 function setSaveButtionEnabled(value) {
     saveButton.attr("disabled", !value);
@@ -50,13 +51,13 @@ async function updateNotebooks() {
 
 async function save() {
     const apiToken = joplinApiKeyInput.val().trim();
-    await Storage.set(Storage.Template, templateTextArea.val());
-    await Storage.set(Storage.Tag, tagInput.val());
-    await Storage.set(Storage.ApiToken, apiToken);
+    await storageService.set(StorageService.Template, templateTextArea.val());
+    await storageService.set(StorageService.Tag, tagInput.val());
+    await storageService.set(StorageService.ApiToken, apiToken);
     joplin.apiToken = apiToken;
     const selectedNotebookId = notebookSelect.val();
     if (hasValue(selectedNotebookId)) {
-        await Storage.set(Storage.SelectedNotebookId, selectedNotebookId);
+        await storageService.set(StorageService.SelectedNotebookId, selectedNotebookId);
     }
     setSaveButtionEnabled(false);
     await updateNotebooks();
@@ -65,10 +66,10 @@ async function save() {
 async function start() {
     await joplin.load();
 
-    $(joplinApiKeyInput).val(await Storage.get(Storage.ApiToken));
-    $(tagInput).val(await Storage.getTag());
+    $(joplinApiKeyInput).val(await storageService.get(StorageService.ApiToken));
+    $(tagInput).val(await storageService.getTag());
 
-    const template = await Storage.getTemplate();
+    const template = await storageService.getTemplate();
     templateTextArea.val(template);
 
     templateTextArea.on("input propertychange", async (event) => {

@@ -3,3 +3,5 @@ dist
 bower_components
 jest.config.js
 lib
+target/memoinjo-firefox/memoinjo
+target/memoinjo-chrome/memoinjo

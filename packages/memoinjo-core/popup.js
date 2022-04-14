@@ -1,6 +1,6 @@
 import JoplinDataApi from "./joplindataapi.js";
 import Renderer from "./renderer.js";
-import Storage from "./storage.js";
+import StorageService from "./services/storageservice.js";
 import {
     normalizeLink, hasValue, urlToId,
     hasNoValue, getSelectedNotebookId,
@@ -18,6 +18,7 @@ const editor = $("#editor");
 const joplin = new JoplinDataApi();
 const renderer = new Renderer();
 const browserService = new BrowserService();
+const storageService = new StorageService();
 
 async function showNotebooks(notebooks) {
     notebooks.forEach((notebook) => {
@@ -47,7 +48,7 @@ async function launchEditor() {
     const joplinLink = `joplin://x-callback-url/openNote?id=${id}`;
     launchButtonLink.attr("href", joplinLink);
 
-    const tag = await Storage.getTag() ?? "";
+    const tag = await storageService.getTag() ?? "";
     const tagId = hasValue(tag) ? await joplin.getOrCreateTag(tag) : "";
 
     await showNotebooks(notebooks);
@@ -55,7 +56,7 @@ async function launchEditor() {
     let note = await joplin.getNode(id);
     if (note === undefined) {
         const parentId = await getSelectedNotebookId(notebooks);
-        renderer.template = await Storage.getTemplate();
+        renderer.template = await storageService.getTemplate();
         const body = renderer.render({
             url, tag, tagId, title,
         });
