@@ -1,11 +1,11 @@
-import JoplinDataAPI from "../packages/memoinjo-core/joplindataapi.js";
+import JoplinDataService from "../packages/memoinjo-core/services/joplindataservice.js";
 
 beforeEach(() => {
     fetch.resetMocks();
 });
 
 test("JoplinDataApi.constructor", () => {
-    const api = new JoplinDataAPI();
+    const api = new JoplinDataService();
     expect(api.apiUrl).toBe("http://localhost:41184");
 });
 
@@ -39,7 +39,7 @@ test("JoplinDataApi.getNotebooks", async () => {
         },
     ];
 
-    const api = new JoplinDataAPI();
+    const api = new JoplinDataService();
     const notebooks = await api.getNotebooks();
 
     expect(notebooks).toStrictEqual(expectedOutput);
@@ -75,7 +75,7 @@ test("JoplinDataApi.getNotebooks should sort", async () => {
         },
     ];
 
-    const api = new JoplinDataAPI();
+    const api = new JoplinDataService();
     const notebooks = await api.getNotebooks();
 
     expect(notebooks).toStrictEqual(expectedOutput);

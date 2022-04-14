@@ -1,5 +1,5 @@
 import StorageService from "./services/storageservice.js";
-import JoplinDataApi from "./joplindataapi.js";
+import JoplinDataService from "./services/joplindataservice.js";
 import { getSelectedNotebookId, hasValue } from "./helper.js";
 import Constants from "./constants.js";
 
@@ -10,7 +10,7 @@ const tagInput = $("#tagInput");
 const notebookSelect = $("#notebookSelect");
 const openJoplinLink = $("#openJoplinLink");
 
-const joplin = new JoplinDataApi();
+const joplin = new JoplinDataService();
 const storageService = new StorageService();
 
 function setSaveButtionEnabled(value) {

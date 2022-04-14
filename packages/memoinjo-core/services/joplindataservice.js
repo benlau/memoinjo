@@ -1,19 +1,20 @@
-import Storage from "./storage.js";
-import { hasValue, hasNoValue } from "./helper.js";
+import StorageService from "./storageservice.js";
+import { hasValue, hasNoValue } from "../helper.js";
 
-export default class JoplinDataApi {
-    constructor() {
+export default class JoplinDataService {
+    constructor(storageService = new StorageService()) {
         this.apiToken = undefined;
         this.apiUrl = "http://localhost:41184";
         this.authToken = undefined;
+        this.storageService = storageService;
     }
 
     async load() {
-        this.apiToken = await Storage.get(Storage.ApiToken);
-        this.authToken = await Storage.get(Storage.AuthToken);
+        this.apiToken = await this.storageService.get(StorageService.ApiToken);
+        this.authToken = await this.storageService.get(StorageService.AuthToken);
     }
 
-    static async fetchData(url, options, body) {
+    async fetchData(url, options, body) {
         try {
             return await fetch(url, options, body);
         } catch (e) {
@@ -26,7 +27,7 @@ export default class JoplinDataApi {
 
     async requestAuthToken() {
         const url = `${this.apiUrl}/auth`;
-        const response = await JoplinDataApi.fetchData(url, {
+        const response = await this.fetchData(url, {
             method: "POST",
         });
         const json = await response.json();
@@ -45,7 +46,7 @@ export default class JoplinDataApi {
 
         while (hasNoValue(this.apiToken)) {
             const url = `${this.apiUrl}/auth/check?auth_token=${this.authToken}`;
-            const response = await JoplinDataApi.fetchData(url, {
+            const response = await this.fetchData(url, {
                 method: "GET",
             });
             if (response.status === 500) {
@@ -73,7 +74,7 @@ export default class JoplinDataApi {
     async getNode(id) {
         // eslint-disable-next-line
         const url = `${this.apiUrl}/notes/${id}?token=${this.apiToken}&fields=id,body,title,parent_id`;
-        const response = await JoplinDataApi.fetchData(url, {
+        const response = await this.fetchData(url, {
             method: "GET",
         });
         if (!response.ok) {
@@ -90,7 +91,7 @@ export default class JoplinDataApi {
             body,
             parent_id: parentId,
         };
-        const response = await JoplinDataApi.fetchData(url, {
+        const response = await this.fetchData(url, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -124,7 +125,7 @@ export default class JoplinDataApi {
 
     async putNote(id, data) {
         const url = `${this.apiUrl}/notes/${id}?token=${this.apiToken}`;
-        const response = await JoplinDataApi.fetchData(url, {
+        const response = await this.fetchData(url, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
@@ -137,7 +138,7 @@ export default class JoplinDataApi {
 
     async getTags() {
         const url = `${this.apiUrl}/tags/?token=${this.apiToken}`;
-        const response = await JoplinDataApi.fetchData(url, {
+        const response = await this.fetchData(url, {
             method: "GET",
         });
         if (!response.ok) {
@@ -167,7 +168,7 @@ export default class JoplinDataApi {
             title: tag.trim(),
         };
 
-        const response = await JoplinDataApi.fetchData(url, {
+        const response = await this.fetchData(url, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -184,7 +185,7 @@ export default class JoplinDataApi {
         const data = {
             id: noteId,
         };
-        const response = await JoplinDataApi.fetchData(url, {
+        const response = await this.fetchData(url, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -197,7 +198,7 @@ export default class JoplinDataApi {
 
     async getNotebooks() {
         const url = `${this.apiUrl}/folders?token=${this.apiToken}`;
-        const response = await JoplinDataApi.fetchData(url, {
+        const response = await this.fetchData(url, {
             method: "GET",
         });
         if (!response.ok) {
