@@ -221,10 +221,10 @@ export default class JoplinDataService {
         };
 
         const tree = createTree("");
-        const res = [];
+        const sortedNotebooks = [];
         const travel = (list, level = 0) => {
             list.forEach((item) => {
-                res.push({
+                sortedNotebooks.push({
                     id: item.id,
                     title: item.title,
                     level,
@@ -233,6 +233,13 @@ export default class JoplinDataService {
             });
         };
         travel(tree);
-        return res;
+
+        const storedNotebookId = await this.storageService.get(StorageService.SelectedNotebookId);
+        const selectedNotebookId = hasValue(storedNotebookId) ? storedNotebookId : [...sortedNotebooks].shift()?.id ?? "";
+
+        return {
+            notebooks: sortedNotebooks,
+            selectedNotebookId,
+        };
     }
 }

@@ -1,15 +1,17 @@
 import JoplinDataService from "../packages/memoinjo-core/services/joplindataservice.js";
 
+jest.mock("../packages/memoinjo-core/services/storageservice.js");
+
 beforeEach(() => {
     fetch.resetMocks();
 });
 
-test("JoplinDataApi.constructor", () => {
+test("JoplinDataService.constructor", () => {
     const api = new JoplinDataService();
     expect(api.apiUrl).toBe("http://localhost:41184");
 });
 
-test("JoplinDataApi.getNotebooks", async () => {
+test("JoplinDataService.getNotebooks", async () => {
     const data = {
         result: "ok",
         items: [
@@ -40,12 +42,12 @@ test("JoplinDataApi.getNotebooks", async () => {
     ];
 
     const api = new JoplinDataService();
-    const notebooks = await api.getNotebooks();
+    const { notebooks } = await api.getNotebooks();
 
     expect(notebooks).toStrictEqual(expectedOutput);
 });
 
-test("JoplinDataApi.getNotebooks should sort", async () => {
+test("JoplinDataService.getNotebooks should sort", async () => {
     const data = {
         result: "ok",
         items: [
@@ -76,7 +78,7 @@ test("JoplinDataApi.getNotebooks should sort", async () => {
     ];
 
     const api = new JoplinDataService();
-    const notebooks = await api.getNotebooks();
+    const { notebooks } = await api.getNotebooks();
 
     expect(notebooks).toStrictEqual(expectedOutput);
 });

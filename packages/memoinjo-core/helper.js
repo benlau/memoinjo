@@ -1,5 +1,3 @@
-import Storage from "./storage.js";
-
 export function normalizeLink(link) {
     const forbiddedQuery = [
         "fbclid",
@@ -45,9 +43,4 @@ export async function sha256(message) {
 
 export async function urlToId(url) {
     return (await sha256(url)).slice(0, 32);
-}
-
-export async function getSelectedNotebookId(notebooks) {
-    const selectedNotebookId = await Storage.get(Storage.SelectedNotebookId);
-    return hasValue(selectedNotebookId) ? selectedNotebookId : [...notebooks].shift()?.id ?? "";
 }

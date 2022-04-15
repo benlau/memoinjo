@@ -1,6 +1,6 @@
 import StorageService from "./services/storageservice.js";
 import JoplinDataService from "./services/joplindataservice.js";
-import { getSelectedNotebookId, hasValue } from "./helper.js";
+import { hasValue } from "./helper.js";
 import Constants from "./constants.js";
 
 const saveButton = $("#saveButton");
@@ -23,7 +23,7 @@ function enableSaveButton() {
 
 async function updateNotebooks() {
     try {
-        const notebooks = await joplin.getNotebooks();
+        const { notebooks, selectedNotebookId } = await joplin.getNotebooks();
         if (notebooks === undefined || notebooks.length === 0) {
             throw new Error("Notebooks Unavailable");
         }
@@ -37,7 +37,6 @@ async function updateNotebooks() {
             notebookSelect.append(`<option value="${notebook.id}">${notebookTitle}</option>`);
         });
 
-        const selectedNotebookId = await getSelectedNotebookId(notebooks);
         notebookSelect.val(selectedNotebookId);
         notebookSelect.prop("disabled", false);
         openJoplinLink.attr("href", `joplin://x-callback-url/openFolder?id=${selectedNotebookId}`);

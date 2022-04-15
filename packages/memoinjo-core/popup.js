@@ -2,7 +2,7 @@ import Renderer from "./renderer.js";
 import StorageService from "./services/storageservice.js";
 import {
     normalizeLink, hasValue, urlToId,
-    hasNoValue, getSelectedNotebookId,
+    hasNoValue,
 } from "./helper.js";
 import "./lib/jquery.textarea_autosize.js";
 import BrowserService from "./browserservice.js";
@@ -43,7 +43,10 @@ async function launchEditor() {
 
     const id = await urlToId(url);
 
-    const notebooks = await joplin.getNotebooks();
+    const {
+        notebooks,
+        selectedNotebookId,
+    } = await joplin.getNotebooks();
 
     const joplinLink = `joplin://x-callback-url/openNote?id=${id}`;
     launchButtonLink.attr("href", joplinLink);
@@ -55,7 +58,7 @@ async function launchEditor() {
 
     let note = await joplin.getNode(id);
     if (note === undefined) {
-        const parentId = await getSelectedNotebookId(notebooks);
+        const parentId = selectedNotebookId;
         renderer.template = await storageService.getTemplate();
         const body = renderer.render({
             url, tag, tagId, title,
