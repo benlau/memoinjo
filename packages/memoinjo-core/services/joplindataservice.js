@@ -193,7 +193,18 @@ export default class JoplinDataService {
             body: JSON.stringify(data),
         });
 
-        return response.json();
+        /* Bug:
+            1) Create the note by MemoInjo
+            2) Delete the note in Joplin
+            3) Create the note by MemoInjo again.
+
+            The response.text() will become "" and 
+            response.json() will throw exception.
+
+            If a tag is already set, the behaviour will be the same.
+
+            Ignore the result to get rid of this problem
+         */
     }
 
     async getNotebooks() {
