@@ -4,24 +4,51 @@ import {
 import Renderer from "../renderer.js";
 
 export default class PopupView {
-    constructor(joplinDataService, browserService, views) {
+    static WIZARD_VIEW = "#wizard";
+
+    static JOPLIN_UNAVAILABLE_VIEW = "#joplinWebClipperNotAvailable";
+
+    static ERROR_PANEL_VIEW = "#errorPanel";
+
+    static EDITOR_VIEW = "#editor";
+
+    constructor(joplinDataService, browserService) {
         this.browserService = browserService;
         this.joplinDataService = joplinDataService;
         this.renderer = new Renderer();
+    }
 
-        const {
-            notebookSelect,
-            titleInput,
-            editor,
-            launchButtonLink,
-            noteEditor,
-        } = views;
+    setup() {
+        const ids = [
+            PopupView.WIZARD_VIEW,
+            PopupView.JOPLIN_UNAVAILABLE_VIEW,
+            PopupView.ERROR_PANEL_VIEW,
+            PopupView.EDITOR_VIEW,
+        ];
+        this.views = ids.map((id) => ({
+            key: id,
+            value: $(id),
+        })).reduce((arr, item) => {
+            // eslint-disable-next-line
+            arr[item.key] = item.value;
+            return arr;
+        }, {});
 
-        this.notebookSelect = notebookSelect;
-        this.titleInput = titleInput;
-        this.editor = editor;
-        this.launchButtonLink = launchButtonLink;
-        this.noteEditor = noteEditor;
+        this.editorView = this.views[PopupView.EDITOR_VIEW];
+        this.noteEditor = $("#noteEditor");
+        this.titleInput = $("#titleInput");
+        this.notebookSelect = $("#notebookSelect");
+        this.launchButtonLink = $("#launchButtonLink");
+    }
+
+    show(view) {
+        Object.entries(this.views).forEach(([key, value]) => {
+            if (key === view) {
+                value.removeClass("d-none");
+            } else {
+                value.addClass("d-none");
+            }
+        });
     }
 
     showNotebooks(notebooks) {
@@ -37,7 +64,7 @@ export default class PopupView {
 
     async launchEditor() {
         const {
-            editor, titleInput, browserService, renderer, joplinDataService,
+            titleInput, browserService, renderer, joplinDataService,
             noteEditor, notebookSelect, launchButtonLink,
         } = this;
         const { storageService } = joplinDataService;
@@ -50,7 +77,7 @@ export default class PopupView {
         const url = normalizeLink(currentTab.url);
 
         titleInput.val(title);
-        editor.removeClass("d-none");
+        this.show(PopupView.EDITOR_VIEW);
 
         const id = await urlToId(url);
 
@@ -102,7 +129,7 @@ export default class PopupView {
         [titleInput, notebookSelect, noteEditor].forEach((elem) => {
             elem.prop("disabled", false);
         });
-        $(editor).removeClass("disabled");
+        this.editorView.removeClass("disabled");
         noteEditor.trigger("focus");
     }
 
@@ -130,5 +157,14 @@ export default class PopupView {
             ...document.adoptedStyleSheets,
             fontFaceSheet,
         ];
+    }
+
+    showError(e) {
+        if (e.type === "ConnectionFailed") {
+            this.show(PopupView.JOPLIN_UNAVAILABLE_VIEW);
+        } else {
+            this.show(PopupView.ERROR_PANEL_VIEW);
+            $("#errorMessage").text(e.stack);
+        }
     }
 }
