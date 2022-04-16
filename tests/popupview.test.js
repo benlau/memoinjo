@@ -9,15 +9,15 @@ function createPopupView() {
     return popupView;
 }
 
-test("PopupView.setup", () => {
+test("PopupView.initialize should create set views attribute", () => {
     const popupView = createPopupView();
     expect(popupView.views).toBe(undefined);
-    popupView.setup();
+    popupView.initialize();
     expect(popupView.views).not.toBe(undefined);
 });
 
 test("PopupView.show", () => {
     const popupView = createPopupView();
-    popupView.setup();
+    popupView.initialize();
     popupView.show(PopupView.EDITOR_VIEW);
 });

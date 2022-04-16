@@ -6,10 +6,15 @@
     <script src="./lib/bower_components/jquery.min.js"></script>
   </head>
   <body>
+    <div id="loading-view">
+      <div class="loading-bar mt-4"></div>
+      <div class="loading-bar mt-3"></div>
+      <div class="loading-editor mt-3"></div>
+    </div>
     <div id="wizard" class="d-none">
       <h2>Permission Needed</h2>
       <p>
-        In order to access your data in Joplin, it needs your authorization. 
+        To access your data in Joplin, it needs your authorization. 
         Please <a href="joplin://x-callback-url/openNote?id=none">open</a> the Joplin desktop application and grant the permission. 
       </p>
     </div>
@@ -22,24 +27,19 @@
         <a href="https://joplinapp.org/clipper/">More info</a>
       </p>
     </div>
-    <div id="loading-view">
-      <div class="loading-bar mt-4"></div>
-      <div class="loading-bar mt-3"></div>
-      <div class="loading-editor mt-3"></div>
-    </div>
     <div id="status"></div>
-    <div id="editor" class="d-none disabled">
+    <div id="editor" class="d-none">
 
       <div id="launchButton" class="text-start">
         <a id="launchButtonLink" href="#">Open in Joplin</a>
       </div>
 
-      <select id="notebookSelect" class="form-select form-select-sm mb-2" disabled>
+      <select id="notebookSelect" class="form-select form-select-sm mb-2">
       </select>
 
-      <input class="form-control" id="titleInput" placeholder="" disabled>
+      <input class="form-control" id="titleInput" placeholder="">
 
-      <textarea class="form-control" id="noteEditor" disabled></textarea>
+      <textarea class="form-control" id="noteEditor"></textarea>
     </div>
     <div id="errorPanel" class="d-none">
       <h2 class="mb-2">Error</h2>

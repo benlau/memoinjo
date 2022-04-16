@@ -1,5 +1,6 @@
 import {
     normalizeLink, hasValue, urlToId,
+    hasNoValue,
 } from "../helper.js";
 import Renderer from "../renderer.js";
 
@@ -18,9 +19,10 @@ export default class PopupView {
         this.browserService = browserService;
         this.joplinDataService = joplinDataService;
         this.renderer = new Renderer();
+        this.noteId = "";
     }
 
-    setup() {
+    initialize() {
         const ids = [
             PopupView.WIZARD_VIEW,
             PopupView.JOPLIN_UNAVAILABLE_VIEW,
@@ -44,6 +46,24 @@ export default class PopupView {
         this.launchButtonLink = $("#launchButtonLink");
     }
 
+    async start() {
+        const {
+            joplinDataService,
+        } = this;
+        try {
+            await joplinDataService.load();
+            if (hasNoValue(joplinDataService.apiToken)) {
+                this.show(PopupView.WIZARD_VIEW);
+                await joplinDataService.requestPermission();
+                this.show(PopupView.LOADING_VIEW);
+            }
+            await this.launchEditor();
+        } catch (e) {
+            this.showError(e);
+        }
+        this.forceRedraw();
+    }
+
     show(view) {
         Object.entries(this.views).forEach(([key, value]) => {
             if (key === view) {
@@ -54,7 +74,7 @@ export default class PopupView {
         });
     }
 
-    showNotebooks(notebooks) {
+    refreshNotebooks(notebooks) {
         notebooks.forEach((notebook) => {
             const pad = "&nbsp;&nbsp;&nbsp;&nbsp;";
             const notebookTitle = notebook.title.padStart(
@@ -81,6 +101,7 @@ export default class PopupView {
 
         titleInput.val(title);
         const id = await urlToId(url);
+        this.noteId = id;
 
         const {
             notebooks,
@@ -93,7 +114,7 @@ export default class PopupView {
         const tag = await storageService.getTag() ?? "";
         const tagId = hasValue(tag) ? await joplin.getOrCreateTag(tag) : "";
 
-        this.showNotebooks(notebooks);
+        this.refreshNotebooks(notebooks);
 
         let note = await joplin.getNode(id);
         if (note === undefined) {
@@ -110,31 +131,36 @@ export default class PopupView {
         notebookSelect.val(note.parent_id);
 
         titleInput.val(note.title);
-        titleInput.on("input propertychange", async (event) => {
-            const text = event.target.value;
-            await joplin.putNodeTitle(id, text);
-        });
 
         noteEditor.textareaAutoSize();
         noteEditor.val(note.body).trigger("input");
+
+        this.show(PopupView.EDITOR_VIEW);
+        noteEditor.trigger("focus");
+        this.listen();
+    }
+
+    listen() {
+        const id = this.noteId;
+        const {
+            titleInput, joplinDataService,
+            noteEditor, notebookSelect,
+        } = this;
+
+        titleInput.on("input propertychange", async (event) => {
+            const text = event.target.value;
+            await joplinDataService.putNodeTitle(id, text);
+        });
+
         noteEditor.on("input propertychange", async (event) => {
             const text = event.target.value;
-            await joplin.putNoteBody(id, text);
+            await joplinDataService.putNoteBody(id, text);
         });
 
         notebookSelect.on("change", async () => {
             const notebookId = notebookSelect.val();
-            await joplin.putNoteParentId(note.id, notebookId);
+            await joplinDataService.putNoteParentId(id, notebookId);
         });
-
-        [titleInput, notebookSelect, noteEditor].forEach((elem) => {
-            elem.prop("disabled", false);
-        });
-
-        this.show(PopupView.EDITOR_VIEW);
-
-        this.editorView.removeClass("disabled");
-        noteEditor.trigger("focus");
     }
 
     forceRedraw() {
