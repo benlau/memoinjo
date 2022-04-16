@@ -12,6 +12,8 @@ export default class PopupView {
 
     static EDITOR_VIEW = "#editor";
 
+    static LOADING_VIEW = "#loading-view";
+
     constructor(joplinDataService, browserService) {
         this.browserService = browserService;
         this.joplinDataService = joplinDataService;
@@ -24,6 +26,7 @@ export default class PopupView {
             PopupView.JOPLIN_UNAVAILABLE_VIEW,
             PopupView.ERROR_PANEL_VIEW,
             PopupView.EDITOR_VIEW,
+            PopupView.LOADING_VIEW,
         ];
         this.views = ids.map((id) => ({
             key: id,
@@ -77,8 +80,6 @@ export default class PopupView {
         const url = normalizeLink(currentTab.url);
 
         titleInput.val(title);
-        this.show(PopupView.EDITOR_VIEW);
-
         const id = await urlToId(url);
 
         const {
@@ -129,6 +130,9 @@ export default class PopupView {
         [titleInput, notebookSelect, noteEditor].forEach((elem) => {
             elem.prop("disabled", false);
         });
+
+        this.show(PopupView.EDITOR_VIEW);
+
         this.editorView.removeClass("disabled");
         noteEditor.trigger("focus");
     }

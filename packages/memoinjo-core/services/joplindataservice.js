@@ -32,7 +32,7 @@ export default class JoplinDataService {
         });
         const json = await response.json();
         this.authToken = json.auth_token;
-        await Storage.set(Storage.AuthToken, this.authToken);
+        await this.storageService.set(StorageService.AuthToken, this.authToken);
     }
 
     async requestPermission() {
@@ -61,8 +61,8 @@ export default class JoplinDataService {
             if (status === "accepted") {
                 this.apiToken = token;
                 this.authToken = undefined;
-                await Storage.set(Storage.ApiToken, this.apiToken);
-                await Storage.set(Storage.AuthToken, this.authToken);
+                await this.storageService.set(StorageService.ApiToken, this.apiToken);
+                await this.storageService.set(StorageService.AuthToken, this.authToken);
             }
             if (status === "rejected") {
                 await this.requestAuthToken();
@@ -185,7 +185,7 @@ export default class JoplinDataService {
         const data = {
             id: noteId,
         };
-        const response = await this.fetchData(url, {
+        await this.fetchData(url, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -198,7 +198,7 @@ export default class JoplinDataService {
             2) Delete the note in Joplin
             3) Create the note by MemoInjo again.
 
-            The response.text() will become "" and 
+            The response.text() will become "" and
             response.json() will throw exception.
 
             If a tag is already set, the behaviour will be the same.

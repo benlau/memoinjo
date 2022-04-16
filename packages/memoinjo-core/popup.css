@@ -11,7 +11,7 @@ body {
 }
 
 #launchButton {
-  margin-top: 8px;
+  margin-top: 0px;
   margin-bottom: 8px;
 }
 
@@ -36,4 +36,53 @@ body {
 
 #launchButton a:active {
   text-decoration: none;
+}
+
+@keyframes fadein-animaiton {
+  0% {
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1
+  }
+}
+
+@keyframes loading-animation {
+  0% {
+      opacity: 1.0;
+  }
+
+  50% {
+      opacity: 0.6;
+  }
+
+  100% {
+      opacity: 1.0;
+  }
+}
+
+.loading-bar {
+  width: 100%;
+  min-width: 60px;
+  min-height: 24px;
+  overflow: hidden;
+  background-color: rgb(241, 242, 243)
+  ;
+  border-radius: 2px;
+  animation: fadein-animaiton 1s ease-in, loading-animation 2s infinite ease-in-out 2s;
+}
+
+.loading-editor {
+  width: 100%;
+  min-width: 60px;
+  min-height: 260px;
+  overflow: hidden;
+  background-color: rgb(241, 242, 243);
+  border-radius: 2px;
+  animation: fadein-animaiton 1s ease-in, loading-animation 2s infinite ease-in-out 2s;
 }
