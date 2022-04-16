@@ -1,5 +1,5 @@
 import {
-    normalizeLink, hasValue, urlToId,
+    normalizeLink, hasValue,
     hasNoValue,
 } from "../helper.js";
 import Renderer from "../renderer.js";
@@ -19,7 +19,14 @@ export default class PopupView {
         this.browserService = browserService;
         this.joplinDataService = joplinDataService;
         this.renderer = new Renderer();
+
         this.noteId = "";
+        this.noteContent = "";
+        this.noteCreated = false;
+        this.noteTitle = "";
+        this.tagId = "";
+        this.selectedNotebookId = "";
+        this.notebooks = [];
     }
 
     initialize() {
@@ -57,7 +64,8 @@ export default class PopupView {
                 await joplinDataService.requestPermission();
                 this.show(PopupView.LOADING_VIEW);
             }
-            await this.launchEditor();
+            await this.load();
+            this.refresh();
         } catch (e) {
             this.showError(e);
         }
@@ -85,12 +93,16 @@ export default class PopupView {
         });
     }
 
-    async launchEditor() {
+    async load() {
         const {
-            titleInput, browserService, renderer, joplinDataService,
-            noteEditor, notebookSelect, launchButtonLink,
+            browserService,
+            joplinDataService,
+            renderer,
         } = this;
-        const { storageService } = joplinDataService;
+        const {
+            storageService,
+        } = joplinDataService;
+
         const joplin = joplinDataService;
 
         const [currentTab] = await browserService.queryTabs({ active: true, currentWindow: true });
@@ -98,9 +110,8 @@ export default class PopupView {
             title,
         } = currentTab;
         const url = normalizeLink(currentTab.url);
-
-        titleInput.val(title);
-        const id = await urlToId(url);
+        this.noteTitle = title;
+        const id = await joplinDataService.urlToId(url);
         this.noteId = id;
 
         const {
@@ -108,32 +119,49 @@ export default class PopupView {
             selectedNotebookId,
         } = await joplin.getNotebooks();
 
-        const joplinLink = `joplin://x-callback-url/openNote?id=${id}`;
-        launchButtonLink.attr("href", joplinLink);
+        this.selectedNotebookId = selectedNotebookId;
+        this.notebooks = notebooks;
 
         const tag = await storageService.getTag() ?? "";
         const tagId = hasValue(tag) ? await joplin.getOrCreateTag(tag) : "";
+        this.tagId = tagId;
 
-        this.refreshNotebooks(notebooks);
-
-        let note = await joplin.getNode(id);
+        let note = await joplin.getNote(id);
         if (note === undefined) {
             const parentId = selectedNotebookId;
             renderer.template = await storageService.getTemplate();
             const body = renderer.render({
                 url, tag, tagId, title,
             });
-            note = await joplin.createNode(id, parentId, title, body, tagId);
+            note = await joplin.createNote(id, parentId, title, body, tagId);
             if (hasValue(tagId)) {
                 await joplin.setNoteTagId(note.id, tagId);
             }
         }
-        notebookSelect.val(note.parent_id);
+        this.selectedNotebookId = note.parent_id;
+        this.noteTitle = note.title;
+        this.noteContent = note.body;
+    }
 
-        titleInput.val(note.title);
+    refresh() {
+        const {
+            titleInput,
+            noteEditor, notebookSelect, launchButtonLink,
+        } = this;
+
+        titleInput.val(this.noteTitle);
+
+        const joplinLink = `joplin://x-callback-url/openNote?id=${this.noteId}`;
+        launchButtonLink.attr("href", joplinLink);
+
+        this.refreshNotebooks(this.notebooks);
+
+        notebookSelect.val(this.selectedNotebookId);
+
+        titleInput.val(this.noteTitle);
 
         noteEditor.textareaAutoSize();
-        noteEditor.val(note.body).trigger("input");
+        noteEditor.val(this.noteContent).trigger("input");
 
         this.show(PopupView.EDITOR_VIEW);
         noteEditor.trigger("focus");
@@ -195,6 +223,30 @@ export default class PopupView {
         } else {
             this.show(PopupView.ERROR_PANEL_VIEW);
             $("#errorMessage").text(e.stack);
+        }
+    }
+
+    async upsertNote() {
+        const {
+            joplinDataService,
+        } = this;
+
+        if (this.noteCreated) {
+            await joplinDataService.putNoteBody(this.noteId, this.noteContent);
+        } else {
+            await joplinDataService.createNote(
+                this.noteId,
+                this.selectedNotebookId,
+                this.noteTitle,
+                this.noteContent,
+                this.tagId,
+            );
+
+            if (hasValue(this.tagId)) {
+                await joplinDataService.setNoteTagId(this.noteId, this.tagId);
+            }
+
+            this.noteCreated = true;
         }
     }
 }

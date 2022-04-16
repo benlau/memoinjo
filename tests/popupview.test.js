@@ -1,10 +1,16 @@
 import BrowserService from "../packages/memoinjo-core/browserservice.js";
 import JoplinDataService from "../packages/memoinjo-core/services/joplindataservice.js";
+import StorageService from "../packages/memoinjo-core/services/storageservice.js";
 import PopupView from "../packages/memoinjo-core/views/popupview.js";
+
+jest.mock("../packages/memoinjo-core/services/joplindataservice.js");
+jest.mock("../packages/memoinjo-core/services/storageservice.js");
+jest.mock("../packages/memoinjo-core/browserservice.js");
 
 function createPopupView() {
     const joplinDataService = new JoplinDataService();
     const browserService = new BrowserService();
+    joplinDataService.storageService = new StorageService();
     const popupView = new PopupView(joplinDataService, browserService);
     return popupView;
 }
@@ -20,4 +26,51 @@ test("PopupView.show", () => {
     const popupView = createPopupView();
     popupView.initialize();
     popupView.show(PopupView.EDITOR_VIEW);
+});
+
+test("PopupView.upsertNote should set noteCreated to true", async () => {
+    const popupView = createPopupView();
+    expect(popupView.noteContent).toBe("");
+    expect(popupView.noteCreated).toBe(false);
+
+    popupView.initialize();
+    popupView.tagId = "tagId";
+
+    await popupView.upsertNote();
+
+    expect(popupView.noteCreated).toBe(true);
+    expect(popupView.joplinDataService.createNote.mock.calls.length).toBe(1);
+    expect(popupView.joplinDataService.setNoteTagId.mock.calls.length).toBe(1);
+});
+
+test("PopupView.upsertNote when noteCreated is false", async () => {
+    const popupView = createPopupView();
+    popupView.initialize();
+    popupView.noteCreated = true;
+
+    await popupView.upsertNote();
+
+    expect(popupView.joplinDataService.putNoteBody.mock.calls.length).toBe(1);
+});
+
+test("PopupView.load", async () => {
+    const popupView = createPopupView();
+    popupView.browserService.queryTabs.mockReturnValue([
+        {
+            title: "",
+            url: "http://github.com",
+        },
+    ]);
+
+    popupView.joplinDataService.getNotebooks.mockReturnValue({
+        notebooks: [],
+        selectedNotebookId: "",
+    });
+
+    popupView.joplinDataService.getNote.mockReturnValue({});
+
+    popupView.joplinDataService.storageService.getTemplate.mockReturnValue("");
+
+    popupView.initialize();
+    await popupView.load();
 });

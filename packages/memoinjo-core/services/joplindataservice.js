@@ -1,5 +1,5 @@
 import StorageService from "./storageservice.js";
-import { hasValue, hasNoValue } from "../helper.js";
+import { hasValue, hasNoValue, sha256 } from "../helper.js";
 
 export default class JoplinDataService {
     constructor(storageService = new StorageService()) {
@@ -71,7 +71,7 @@ export default class JoplinDataService {
         }
     }
 
-    async getNode(id) {
+    async getNote(id) {
         // eslint-disable-next-line
         const url = `${this.apiUrl}/notes/${id}?token=${this.apiToken}&fields=id,body,title,parent_id`;
         const response = await this.fetchData(url, {
@@ -83,7 +83,7 @@ export default class JoplinDataService {
         return response.json();
     }
 
-    async createNode(id, parentId, title, body) {
+    async createNote(id, parentId, title, body) {
         const url = `${this.apiUrl}/notes?token=${this.apiToken}`;
         const data = {
             id,
@@ -252,5 +252,9 @@ export default class JoplinDataService {
             notebooks: sortedNotebooks,
             selectedNotebookId,
         };
+    }
+
+    async urlToId(url) {
+        return (await sha256(url)).slice(0, 32);
     }
 }
