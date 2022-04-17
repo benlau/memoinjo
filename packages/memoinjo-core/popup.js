@@ -1,5 +1,5 @@
 import "./lib/jquery.textarea_autosize.js";
-import BrowserService from "./browserservice.js";
+import BrowserService from "./services/browserservice.js";
 import JoplinDataService from "./services/joplindataservice.js";
 import PopupView from "./views/popupview.js";
 
@@ -10,5 +10,5 @@ const popupView = new PopupView(
     browserService,
 );
 
-popupView.initialize();
+popupView.mount();
 popupView.start();
