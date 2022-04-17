@@ -7,7 +7,7 @@ const saveButton = $("#saveButton");
 const joplinApiKeyInput = $("#joplinApiKeyInput");
 const templateTextArea = $("#templateTextArea");
 const tagInput = $("#tagInput");
-const notebookSelect = $("#notebookSelect");
+const notebookSelect = $("#notebook-select");
 const openJoplinLink = $("#openJoplinLink");
 
 const joplin = new JoplinDataService();

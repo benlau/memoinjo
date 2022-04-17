@@ -102,7 +102,7 @@ export default class JoplinDataService {
         return response.json();
     }
 
-    async putNodeTitle(id, title) {
+    async putNoteTitle(id, title) {
         const data = {
             title,
         };
@@ -111,6 +111,14 @@ export default class JoplinDataService {
 
     async putNoteBody(id, body) {
         const data = {
+            body,
+        };
+        return this.putNote(id, data);
+    }
+
+    async putNoteTitleBody(id, title, body) {
+        const data = {
+            title,
             body,
         };
         return this.putNote(id, data);

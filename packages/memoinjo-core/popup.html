@@ -11,14 +11,14 @@
       <div class="loading-bar mt-3"></div>
       <div class="loading-editor mt-3"></div>
     </div>
-    <div id="wizard" class="d-none">
+    <div id="wizard-view" class="d-none">
       <h2>Permission Needed</h2>
       <p>
         To access your data in Joplin, it needs your authorization. 
         Please <a href="joplin://x-callback-url/openNote?id=none">open</a> the Joplin desktop application and grant the permission. 
       </p>
     </div>
-    <div id="joplinWebClipperNotAvailable" class="d-none">
+    <div id="joplin-web-clipper-error-view" class="d-none">
       <h2>Unable to connect to Joplin Web Clipper</h2>
       <p>
         Please ensure that the Joplin Desktop is started and that the clipper service is enabled in the configuration.
@@ -27,21 +27,21 @@
         <a href="https://joplinapp.org/clipper/">More info</a>
       </p>
     </div>
-    <div id="status"></div>
-    <div id="editor" class="d-none">
+    <div id="editor-view" class="d-none">
 
-      <div id="launchButton" class="text-start">
-        <a id="launchButtonLink" href="#">Open in Joplin</a>
+      <div id="button-bar" class="text-start">
+        <a id="create-button-link" href="#">Create</a>
+        <a id="open-in-joplin-link" href="#" class="d-none">Open in Joplin</a>
       </div>
 
-      <select id="notebookSelect" class="form-select form-select-sm mb-2">
+      <select id="notebook-select" class="form-select form-select-sm mb-2">
       </select>
 
-      <input class="form-control" id="titleInput" placeholder="">
+      <input class="form-control" id="title-input" placeholder="">
 
-      <textarea class="form-control" id="noteEditor"></textarea>
+      <textarea class="form-control" id="note-editor"></textarea>
     </div>
-    <div id="errorPanel" class="d-none">
+    <div id="error-view" class="d-none">
       <h2 class="mb-2">Error</h2>
       <pre><code id="errorMessage"></code></pre>
     </div>

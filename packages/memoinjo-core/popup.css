@@ -10,31 +10,32 @@ body {
   opacity: 0.5;
 }
 
-#launchButton {
+#button-bar {
   margin-top: 0px;
   margin-bottom: 8px;
+  margin-left: 2px;
 }
 
-#noteEditor {
+#note-editor {
   min-width: 200px;
   min-height: 240px;
   max-height: 450px;
   margin-top: 8px;
 }
 
-#launchButton a:link {
+#button-bar a:link {
   text-decoration: none;
 }
 
-#launchButton a:visited {
+#button-bar a:visited {
   text-decoration: none;
 }
 
-#launchButton a:hover {
+#button-bar a:hover {
   text-decoration: none;
 }
 
-#launchButton a:active {
+#button-bar a:active {
   text-decoration: none;
 }
 

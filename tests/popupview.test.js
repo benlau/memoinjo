@@ -28,29 +28,29 @@ test("PopupView.show", () => {
     popupView.show(PopupView.EDITOR_VIEW);
 });
 
-test("PopupView.upsertNote should set noteCreated to true", async () => {
+test("PopupView.upsertNote should set noteAvailable to true", async () => {
     const popupView = createPopupView();
     expect(popupView.noteContent).toBe("");
-    expect(popupView.noteCreated).toBe(false);
+    expect(popupView.noteAvailable).toBe(false);
 
     popupView.initialize();
     popupView.tagId = "tagId";
 
     await popupView.upsertNote();
 
-    expect(popupView.noteCreated).toBe(true);
+    expect(popupView.noteAvailable).toBe(true);
     expect(popupView.joplinDataService.createNote.mock.calls.length).toBe(1);
     expect(popupView.joplinDataService.setNoteTagId.mock.calls.length).toBe(1);
 });
 
-test("PopupView.upsertNote when noteCreated is false", async () => {
+test("PopupView.upsertNote when noteAvailable is false", async () => {
     const popupView = createPopupView();
     popupView.initialize();
-    popupView.noteCreated = true;
+    popupView.noteAvailable = true;
 
     await popupView.upsertNote();
 
-    expect(popupView.joplinDataService.putNoteBody.mock.calls.length).toBe(1);
+    expect(popupView.joplinDataService.putNoteTitleBody.mock.calls.length).toBe(1);
 });
 
 test("PopupView.load", async () => {
