@@ -36,3 +36,28 @@ test("PopupService.load", async () => {
 
     await popupService.load();
 });
+
+test("PopupService.breakdownUrl", async () => {
+    const popupService = createPopupService();
+
+    expect(
+        popupService.breakdownUrl(
+            "https://github.com/xxx/1#issuecomment-1024999462?",
+        ),
+    ).toEqual([
+        "https://github.com/xxx/1#issuecomment-1024999462?",
+        "https://github.com/xxx/1",
+        "https://github.com/xxx",
+        "https://github.com",
+    ]);
+
+    expect(
+        popupService.breakdownUrl(
+            "https://github.com/xxx/1",
+        ),
+    ).toEqual([
+        "https://github.com/xxx/1",
+        "https://github.com/xxx",
+        "https://github.com",
+    ]);
+});

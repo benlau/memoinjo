@@ -52,4 +52,25 @@ export default class PopupService {
         this.notebooks = notebooks;
         this.selectedNotebookId = selectedNotebookId;
     }
+
+    breakdownUrl(url) {
+        const res = [];
+        res.push(normalizeLink(url));
+
+        const u = new URL(url);
+        u.hash = "";
+        u.search = "";
+        res.push(u.toString());
+        const { pathname } = u;
+        const tokens = pathname.split("/");
+        tokens.pop();
+
+        while (tokens.length > 0) {
+            u.pathname = tokens.join("/");
+            res.push(tokens.length > 1 ? u.toString() : u.toString().replace(/\/$/, ""));
+            tokens.pop();
+        }
+
+        return [...new Set(res)];
+    }
 }
