@@ -4,15 +4,13 @@ import {
 import Renderer from "../renderer.js";
 
 export default class EditorView {
-    constructor(joplinDataService) {
+    constructor(popupService) {
+        this.popupService = popupService;
         this.noteId = "";
         this.noteTitle = "";
         this.noteAvailable = false;
         this.noteContent = "";
-        this.notebooks = [];
-        this.tagId = "";
-        this.selectedNotebookId = "";
-        this.joplinDataService = joplinDataService;
+        this.notebookId = "";
         this.renderer = new Renderer();
     }
 
@@ -20,7 +18,7 @@ export default class EditorView {
         const {
             joplinDataService,
             notebooks,
-        } = this;
+        } = this.popupService;
 
         const html = `
         <div id="button-bar" class="text-start">
@@ -47,8 +45,6 @@ export default class EditorView {
         const joplinLink = `joplin://x-callback-url/openNote?id=${this.noteId}`;
         openJoplinLink.attr("href", joplinLink);
 
-        notebookSelect.val(this.selectedNotebookId);
-
         titleInput.val(this.noteTitle);
 
         noteEditor.textareaAutoSize();
@@ -62,6 +58,11 @@ export default class EditorView {
             );
             notebookSelect.append(`<option value="${notebook.id}">${notebookTitle}</option>`);
         });
+        notebookSelect.val(this.notebookId);
+
+        if (this.noteAvailable) {
+            this.setOpenJoplinLinkVisible();
+        }
 
         titleInput.on("input propertychange", async (event) => {
             const text = event.target.value;
@@ -85,56 +86,60 @@ export default class EditorView {
             await this.upsertNote();
         });
 
-        titleInput.val(this.noteTitle);
-
         noteEditor.trigger("focus");
     }
 
-    async load(url, pageTitle) {
+    async load() {
         const {
-            joplinDataService,
+            popupService,
             renderer,
         } = this;
+        const {
+            joplinDataService,
+        } = popupService;
         const {
             storageService,
         } = joplinDataService;
 
-        const noteId = await joplinDataService.urlToId(url);
+        const noteId = popupService.currentTab.id;
         this.noteId = noteId;
 
         const {
-            notebooks,
             selectedNotebookId,
-        } = await joplinDataService.getNotebooks();
-
-        this.notebooks = notebooks;
-
-        const tag = await storageService.getTag() ?? "";
-        const tagId = hasValue(tag) ? await joplinDataService.getOrCreateTag(tag) : "";
-        this.tagId = tagId;
+        } = popupService;
 
         const note = await joplinDataService.getNote(noteId);
         if (note === undefined) {
             renderer.template = await storageService.getTemplate();
-            this.selectedNotebookId = selectedNotebookId;
-            this.noteTitle = pageTitle;
+            this.notebookId = selectedNotebookId;
+            this.noteTitle = popupService.currentTab.title;
+            const {
+                url,
+                title,
+            } = popupService.currentTab;
+            const {
+                tag,
+                tagId,
+            } = popupService;
             this.noteContent = renderer.render({
-                url, tag, tagId, pageTitle,
+                url, tag, tagId, title,
             });
             this.noteAvailable = false;
         } else {
-            this.selectedNotebookId = note.parent_id;
+            this.notebookId = note.parent_id;
             this.noteTitle = note.title;
             this.noteContent = note.body;
             this.noteAvailable = true;
-            this.onNoteAvailable();
         }
     }
 
     async upsertNote() {
         const {
-            joplinDataService,
+            popupService,
         } = this;
+        const {
+            joplinDataService,
+        } = popupService;
 
         if (this.noteAvailable) {
             await joplinDataService.putNoteTitleBody(this.noteId, this.noteTitle, this.noteContent);
@@ -152,11 +157,11 @@ export default class EditorView {
             }
 
             this.noteAvailable = true;
-            this.onNoteAvailable();
+            this.setOpenJoplinLinkVisible();
         }
     }
 
-    onNoteAvailable() {
+    setOpenJoplinLinkVisible() {
         const openJoplinLink = $("#open-in-joplin-link");
         const createNoteLink = $("#create-note-link");
 

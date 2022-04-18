@@ -1,5 +1,4 @@
 import {
-    normalizeLink,
     hasNoValue,
 } from "../helper.js";
 import Renderer from "../renderer.js";
@@ -16,11 +15,10 @@ export default class PopupView {
 
     static LOADING_VIEW = "#loading-view";
 
-    constructor(joplinDataService, browserService) {
-        this.browserService = browserService;
-        this.joplinDataService = joplinDataService;
+    constructor(popupService) {
+        this.popupService = popupService;
         this.renderer = new Renderer();
-        this.mainEditorView = new EditorView(joplinDataService);
+        this.mainEditorView = new EditorView(popupService);
     }
 
     mount() {
@@ -46,7 +44,7 @@ export default class PopupView {
     async start() {
         const {
             joplinDataService,
-        } = this;
+        } = this.popupService;
         try {
             await joplinDataService.load();
             if (hasNoValue(joplinDataService.apiToken)) {
@@ -74,16 +72,8 @@ export default class PopupView {
     }
 
     async load() {
-        const {
-            browserService,
-        } = this;
-
-        const [currentTab] = await browserService.queryTabs({ active: true, currentWindow: true });
-        const {
-            title,
-        } = currentTab;
-        const url = normalizeLink(currentTab.url);
-        await this.mainEditorView.load(url, title);
+        await this.popupService.load();
+        await this.mainEditorView.load();
     }
 
     forceRedraw() {
