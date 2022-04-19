@@ -21,9 +21,12 @@ export default class EditorView {
         } = this.popupService;
 
         const html = `
-        <div id="button-bar" class="text-start">
+        <div id="button-bar" class="text-start d-flex justify-content-between">
             <a id="create-note-link" href="#">Create</a>
             <a id="open-in-joplin-link" href="#" class="d-none">Open in Joplin</a>
+            <a id="search-link" href="#" class="d-none">
+                <i class="fab fa-searchengin"></i>
+            </a>
         </div>
 
         <select id="notebook-select" class="form-select form-select-sm mb-2">
