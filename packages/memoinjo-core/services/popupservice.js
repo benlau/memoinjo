@@ -73,4 +73,26 @@ export default class PopupService {
 
         return [...new Set(res)];
     }
+
+    async upsertNote(noteId, noteTitle, noteContent, noteAvailable) {
+        const {
+            joplinDataService,
+        } = this;
+
+        if (noteAvailable) {
+            await joplinDataService.putNoteTitleBody(noteId, noteTitle, noteContent);
+        } else {
+            await joplinDataService.createNote(
+                noteId,
+                this.selectedNotebookId,
+                noteTitle,
+                noteContent,
+                this.tagId,
+            );
+
+            if (hasValue(this.tagId)) {
+                await joplinDataService.setNoteTagId(noteId, this.tagId);
+            }
+        }
+    }
 }

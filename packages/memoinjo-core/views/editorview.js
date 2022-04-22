@@ -1,6 +1,3 @@
-import {
-    hasValue,
-} from "../helper.js";
 import Renderer from "../renderer.js";
 
 export default class EditorView {
@@ -139,26 +136,11 @@ export default class EditorView {
     async upsertNote() {
         const {
             popupService,
+            noteAvailable,
         } = this;
-        const {
-            joplinDataService,
-        } = popupService;
 
-        if (this.noteAvailable) {
-            await joplinDataService.putNoteTitleBody(this.noteId, this.noteTitle, this.noteContent);
-        } else {
-            await joplinDataService.createNote(
-                this.noteId,
-                this.selectedNotebookId,
-                this.noteTitle,
-                this.noteContent,
-                this.tagId,
-            );
-
-            if (hasValue(this.tagId)) {
-                await joplinDataService.setNoteTagId(this.noteId, this.tagId);
-            }
-
+        await popupService.upsertNote(this.noteId, this.noteTitle, this.noteContent, noteAvailable);
+        if (!noteAvailable) {
             this.noteAvailable = true;
             this.setOpenJoplinLinkVisible();
         }
