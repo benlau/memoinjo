@@ -265,4 +265,26 @@ export default class JoplinDataService {
     async urlToId(url) {
         return (await sha256(url)).slice(0, 32);
     }
+
+    async searchNotes(keyword) {
+        let hasMore = true;
+        let page = 1;
+        let items = [];
+        while (hasMore) {
+            // eslint-disable-next-line
+            const url = `${this.apiUrl}/search?token=${this.apiToken}&query=${encodeURIComponent(keyword)}&page=${page}`;
+
+            const response = await this.fetchData(url, {
+                method: "GET",
+            });
+            if (!response.ok) {
+                break;
+            }
+            const json = await response.json();
+
+            items = items.concat(json.items);
+            if (json.has_more) { page += 1; } else { hasMore = false; }
+        }
+        return items;
+    }
 }

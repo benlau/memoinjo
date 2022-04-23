@@ -61,3 +61,60 @@ test("PopupService.breakdownUrl", async () => {
         "https://github.com",
     ]);
 });
+
+test("PopupService.searchRelatedNotes", async () => {
+    const popupService = createPopupService();
+    const url = "https://github.com/xxx/1";
+    const urls = popupService.breakdownUrl(url);
+    const max = 100;
+
+    popupService.joplinDataService.searchNotes
+        .mockReturnValueOnce([{ id: "1" }])
+        .mockReturnValueOnce([{ id: "2" }])
+        .mockReturnValueOnce([{ id: "3" }]);
+
+    let result = [];
+    await popupService.searchRelatedNotes(url, max, (keyword, notes) => {
+        result = result.concat(notes);
+        return true; // continue
+    });
+
+    expect(result.length).toBe(urls.length);
+});
+
+test("PopupService.searchRelatedNotes should perform deduplication", async () => {
+    const popupService = createPopupService();
+    const url = "https://github.com/xxx/1";
+    const max = 100;
+
+    popupService.joplinDataService.searchNotes
+        .mockReturnValue([{ id: "1" }]);
+
+    let result = [];
+    await popupService.searchRelatedNotes(url, max, (keyword, notes) => {
+        result = result.concat(notes);
+        return true; // continue
+    });
+
+    expect(result.length).toBe(1);
+});
+
+test("PopupService.searchRelatedNotes could stop by callback", async () => {
+    const popupService = createPopupService();
+    const url = "https://github.com/xxx/1";
+    const urls = popupService.breakdownUrl(url);
+    const max = 100;
+
+    popupService.joplinDataService.searchNotes
+        .mockReturnValueOnce([{ id: "1" }])
+        .mockReturnValueOnce([{ id: "2" }])
+        .mockReturnValueOnce([{ id: "3" }]);
+
+    let result = [];
+    await popupService.searchRelatedNotes(url, max, (keyword, notes) => {
+        result = result.concat(notes);
+        return false; // stop
+    });
+
+    expect(result.length).toBe(1);
+});

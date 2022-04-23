@@ -95,4 +95,35 @@ export default class PopupService {
             }
         }
     }
+
+    async searchRelatedNotes(url, max, callback) {
+        const {
+            joplinDataService,
+        } = this;
+
+        const urls = this.breakdownUrl(url);
+        let count = 0;
+        const set = new Set();
+
+        while (urls.length > 0) {
+            const keyword = urls.shift();
+
+            const notes = await joplinDataService.searchNotes(keyword);
+            count += notes.length;
+
+            const filteredNotes = notes.filter((note) => {
+                const res = set.has(note.id);
+                if (!res) {
+                    set.add(note.id);
+                }
+                return !res;
+            });
+
+            const cont = await callback(keyword, filteredNotes);
+
+            if (count >= max || cont === false) {
+                break;
+            }
+        }
+    }
 }
