@@ -109,7 +109,6 @@ export default class PopupService {
             const keyword = urls.shift();
 
             const notes = await joplinDataService.searchNotes(keyword);
-            count += notes.length;
 
             const filteredNotes = notes.filter((note) => {
                 const res = set.has(note.id);
@@ -119,11 +118,15 @@ export default class PopupService {
                 return !res;
             });
 
+            count += filteredNotes.length;
+
             const cont = await callback(filteredNotes, keyword);
 
             if (count >= max || cont === false) {
                 break;
             }
         }
+
+        return count;
     }
 }

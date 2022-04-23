@@ -10,7 +10,8 @@ export default class SearchingView {
         const html = `
         <div>
             <div>
-                <a id="searching-view-back-link" href="#" class="icon-button"><i class="mdi mdi-arrow-left"></i></a>
+                <a id="searching-view-back-link" href="#" class="icon-button"
+                    ><i class="mdi mdi-arrow-left"></i></a>
                 <span class="ml-1">Related Memos</span>
             </div>
             <div id="searching-view-content" class="mt-2">
@@ -24,21 +25,32 @@ export default class SearchingView {
         this.refresh();
     }
 
-    refresh() {
+    async refresh() {
         $("#searching-view-content").html("");
-        this.popupService.searchRelatedNotes(this.popupService.currentTab.url, MAX_NOTES, (notes) => {
-            notes.forEach((note) => {
-                const joplinLink = `joplin://x-callback-url/openNote?id=${note.id}`;
+        const count = await this.popupService.searchRelatedNotes(
+            this.popupService.currentTab.url,
+            MAX_NOTES,
+            (notes) => {
+                notes.forEach((note) => {
+                    const joplinLink = `joplin://x-callback-url/openNote?id=${note.id}`;
 
-                const link = document.createElement("a");
-                $(link).attr("href", joplinLink);
-                $(link).text(note.title);
+                    const link = document.createElement("a");
+                    $(link).attr("href", joplinLink);
+                    $(link).text(note.title);
 
-                const elem = document.createElement("div");
-                $(elem).addClass("searching-view-item");
-                $(elem).append(link);
-                $("#searching-view-content").append(elem);
-            });
-        });
+                    const elem = document.createElement("div");
+                    $(elem).addClass("searching-view-item");
+                    $(elem).append(link);
+                    $("#searching-view-content").append(elem);
+                });
+            },
+        );
+        if (count === 0) {
+            $("#searching-view-content").html(`
+                <div>
+                    No memo found
+                </div>
+            `);
+        }
     }
 }
