@@ -1,7 +1,7 @@
 import Renderer from "../renderer.js";
 
 export default class EditorView {
-    constructor(popupService) {
+    constructor(popupService, onSearchClicked) {
         this.popupService = popupService;
         this.noteId = "";
         this.noteTitle = "";
@@ -9,6 +9,7 @@ export default class EditorView {
         this.noteContent = "";
         this.notebookId = "";
         this.renderer = new Renderer();
+        this.onSearchClicked = onSearchClicked;
     }
 
     mount(parent) {
@@ -21,7 +22,7 @@ export default class EditorView {
         <div id="button-bar" class="text-start d-flex justify-content-between align-items-center">
             <a id="create-note-link" href="#">Create</a>
             <a id="open-in-joplin-link" href="#" class="d-none">Open in Joplin</a>
-            <a id="search-link" href="#" class="d-none">
+            <a id="search-link" href="#" class="icon-button">
                 <h5 class="mb-0"><i class="mdi mdi-magnify"></i></h5>
             </a>
         </div>
@@ -41,6 +42,7 @@ export default class EditorView {
         const notebookSelect = $("#notebook-select");
         const openJoplinLink = $("#open-in-joplin-link");
         const createNoteLink = $("#create-note-link");
+        const searchLink = $("#search-link");
 
         const joplinLink = `joplin://x-callback-url/openNote?id=${this.noteId}`;
         openJoplinLink.attr("href", joplinLink);
@@ -85,6 +87,8 @@ export default class EditorView {
         createNoteLink.on("click", async () => {
             await this.upsertNote();
         });
+
+        searchLink.on("click", this.onSearchClicked);
 
         noteEditor.trigger("focus");
     }

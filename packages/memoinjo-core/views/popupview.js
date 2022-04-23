@@ -3,6 +3,7 @@ import {
 } from "../helper.js";
 import Renderer from "../renderer.js";
 import EditorView from "./editorview.js";
+import SearchingView from "./searchingview.js";
 
 export default class PopupView {
     static WIZARD_VIEW = "#wizard-view";
@@ -15,10 +16,18 @@ export default class PopupView {
 
     static LOADING_VIEW = "#loading-view";
 
+    static SEARCHING_VIEW = "#searching-view";
+
     constructor(popupService) {
         this.popupService = popupService;
         this.renderer = new Renderer();
-        this.mainEditorView = new EditorView(popupService);
+        this.mainEditorView = new EditorView(popupService, () => {
+            this.show(PopupView.SEARCHING_VIEW);
+            this.searchingView.mount($(PopupView.SEARCHING_VIEW));
+        });
+        this.searchingView = new SearchingView(popupService, () => {
+            this.show(PopupView.EDITOR_VIEW);
+        });
     }
 
     mount() {
@@ -28,6 +37,7 @@ export default class PopupView {
             PopupView.ERROR_PANEL_VIEW,
             PopupView.EDITOR_VIEW,
             PopupView.LOADING_VIEW,
+            PopupView.SEARCHING_VIEW,
         ];
         this.views = ids.map((id) => ({
             key: id,

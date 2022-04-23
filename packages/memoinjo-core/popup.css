@@ -41,6 +41,26 @@ body {
   text-decoration: none;
 }
 
+.icon-button {
+  text-decoration: none;
+  color: #212529;
+}
+
+.icon-button:hover {
+  text-decoration: none;
+  color: #7f212529;
+}
+
+.icon-button:visited {
+  text-decoration: none;
+  color: #7f212529;
+}
+
+.icon-button:active {
+  text-decoration: none;
+  color: #7f212529;
+}
+
 @keyframes fadein-animaiton {
   0% {
     opacity: 0;
@@ -88,4 +108,42 @@ body {
   background-color: rgb(241, 242, 243);
   border-radius: 2px;
   animation: fadein-animaiton 1s ease-in, loading-animation 2s infinite ease-in-out 2s;
+}
+
+.searching-view-item {
+  user-select: none;
+  -webkit-user-drag: none;
+  height: 28px;
+  line-height: 28px;
+  white-space: nowrap;
+  max-width: 370px;
+  padding-left: 8px;
+  padding-right: 0px;
+  overflow-x: hidden;
+}
+
+.searching-view-item a {
+  text-decoration: none;
+}
+
+.searching-view-item a:hover {
+  text-decoration: none;
+}
+
+.searching-view-item a:visited {
+  text-decoration: none;
+}
+
+.searching-view-item a:active {
+  text-decoration: none;
+}
+
+.searching-view-item:not(:first-child):before  {
+  content: " ";
+  position: absolute;
+  left: 20px;
+  right: 20px;
+  top: -1px;
+  height: 1px;
+  background-color: #1f1f1f;
 }

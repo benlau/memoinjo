@@ -119,7 +119,7 @@ export default class PopupService {
                 return !res;
             });
 
-            const cont = await callback(keyword, filteredNotes);
+            const cont = await callback(filteredNotes, keyword);
 
             if (count >= max || cont === false) {
                 break;
