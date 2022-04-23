@@ -22,10 +22,10 @@ bootstrap-memoinjo-core:
 	mkdir -p ${ASSETS_PATH}
 	cp bower_components/bootstrap/dist/css/bootstrap.min.css ${ASSETS_PATH}
 	cp bower_components/jquery/dist/jquery.min.js ${ASSETS_PATH}
-	mkdir -p ${ASSETS_PATH}/fontawesome/webfonts
-	mkdir -p ${ASSETS_PATH}/fontawesome/css
-	cp bower_components/Font-Awesome/css/all.min.css ${ASSETS_PATH}/fontawesome/css
-	cp -R bower_components/Font-Awesome/webfonts/. ${ASSETS_PATH}/fontawesome/webfonts
+	mkdir -p ${ASSETS_PATH}/mdi/fonts
+	mkdir -p ${ASSETS_PATH}/mdi/css
+	cp bower_components/mdi/css/materialdesignicons.min.css ${ASSETS_PATH}/mdi/css
+	cp -R bower_components/mdi/fonts/. ${ASSETS_PATH}/mdi/fonts
 
 .PHONY: bootstrap-memoinjo-firefox
 bootstrap-memoinjo-firefox:

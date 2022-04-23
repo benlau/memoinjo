@@ -1,5 +1,5 @@
 @import url('./lib/bower_components/bootstrap.min.css');
-@import url('./lib/bower_components/fontawesome/css/all.min.css');
+@import url('./lib/bower_components/mdi/css/materialdesignicons.min.css');
 
 body {
   min-width: 400px;

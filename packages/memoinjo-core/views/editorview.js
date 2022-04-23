@@ -18,11 +18,11 @@ export default class EditorView {
         } = this.popupService;
 
         const html = `
-        <div id="button-bar" class="text-start d-flex justify-content-between">
+        <div id="button-bar" class="text-start d-flex justify-content-between align-items-center">
             <a id="create-note-link" href="#">Create</a>
             <a id="open-in-joplin-link" href="#" class="d-none">Open in Joplin</a>
             <a id="search-link" href="#" class="d-none">
-                <i class="fab fa-searchengin"></i>
+                <h5 class="mb-0"><i class="mdi mdi-magnify"></i></h5>
             </a>
         </div>
 
