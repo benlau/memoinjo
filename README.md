@@ -5,6 +5,8 @@ MemoInjo is a browser extension that sticks a memo on any website and edit/sync 
 
 MemoInjo is not a web clipper that could capture only once. You could reopen the same memo for the same URL. And thank to the sync feature of Joplin, you may access the memo across different computer.
 
+![Screenshot](https://user-images.githubusercontent.com/82716/164896560-97741f75-741e-4dd6-916c-6fd7fd2f8b51.png)
+
 **Download**
 
 - [Chrome Extension](https://chrome.google.com/webstore/detail/memoinjo/fbcdcliemdonkopdkpejdfmajlbaibac)
