@@ -1,7 +1,4 @@
-import {
-    normalizeLink,
-    hasValue,
-} from "../helper.js";
+import { normalizeLink, hasValue } from "../helper.js";
 
 export default class PopupService {
     constructor(joplinDataService, browserService) {
@@ -19,18 +16,14 @@ export default class PopupService {
     }
 
     async load() {
-        const {
-            browserService,
-            joplinDataService,
-        } = this;
-        const {
-            storageService,
-        } = joplinDataService;
+        const { browserService, joplinDataService } = this;
+        const { storageService } = joplinDataService;
 
-        const [currentTab] = await browserService.queryTabs({ active: true, currentWindow: true });
-        const {
-            title,
-        } = currentTab;
+        const [currentTab] = await browserService.queryTabs({
+            active: true,
+            currentWindow: true,
+        });
+        const { title } = currentTab;
         const url = normalizeLink(currentTab.url);
         this.currentTab = {
             url,
@@ -38,16 +31,16 @@ export default class PopupService {
             id: await joplinDataService.urlToId(url),
         };
 
-        const tag = await storageService.getTag() ?? "";
-        const tagId = hasValue(tag) ? await joplinDataService.getOrCreateTag(tag) : "";
+        const tag = (await storageService.getTag()) ?? "";
+        const tagId = hasValue(tag)
+            ? await joplinDataService.getOrCreateTag(tag)
+            : "";
 
         this.tagId = tagId;
         this.tag = tag;
 
-        const {
-            notebooks,
-            selectedNotebookId,
-        } = await joplinDataService.getNotebooks();
+        const { notebooks, selectedNotebookId } =
+            await joplinDataService.getNotebooks();
 
         this.notebooks = notebooks;
         this.selectedNotebookId = selectedNotebookId;
@@ -67,7 +60,11 @@ export default class PopupService {
 
         while (tokens.length > 0) {
             u.pathname = tokens.join("/");
-            res.push(tokens.length > 1 ? u.toString() : u.toString().replace(/\/$/, ""));
+            res.push(
+                tokens.length > 1
+                    ? u.toString()
+                    : u.toString().replace(/\/$/, ""),
+            );
             tokens.pop();
         }
 
@@ -75,12 +72,14 @@ export default class PopupService {
     }
 
     async upsertNote(noteId, noteTitle, noteContent, noteAvailable) {
-        const {
-            joplinDataService,
-        } = this;
+        const { joplinDataService } = this;
 
         if (noteAvailable) {
-            await joplinDataService.putNoteTitleBody(noteId, noteTitle, noteContent);
+            await joplinDataService.putNoteTitleBody(
+                noteId,
+                noteTitle,
+                noteContent,
+            );
         } else {
             await joplinDataService.createNote(
                 noteId,
@@ -97,9 +96,7 @@ export default class PopupService {
     }
 
     async searchRelatedNotes(url, max, callback) {
-        const {
-            joplinDataService,
-        } = this;
+        const { joplinDataService } = this;
 
         const urls = this.breakdownUrl(url);
         let count = 0;

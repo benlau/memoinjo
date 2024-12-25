@@ -8,7 +8,7 @@
     const pluginDataName = `plugin_${pluginName}`;
 
     const containsText = function (value) {
-        return (value.replace(/\s/g, "").length > 0);
+        return value.replace(/\s/g, "").length > 0;
     };
 
     function Plugin(element, options) {
@@ -20,8 +20,9 @@
     Plugin.prototype = {
         init() {
             const height = this.$element.outerHeight();
-            const diff = parseInt(this.$element.css("paddingBottom"))
-                 + parseInt(this.$element.css("paddingTop")) || 0;
+            const diff =
+                parseInt(this.$element.css("paddingBottom")) +
+                    parseInt(this.$element.css("paddingTop")) || 0;
 
             if (containsText(this.element.value)) {
                 this.$element.height(this.element.scrollHeight - diff);
@@ -49,4 +50,4 @@
         });
         return this;
     };
-}(jQuery, window, document));
+})(jQuery, window, document);

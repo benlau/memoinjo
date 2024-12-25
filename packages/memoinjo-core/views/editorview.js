@@ -13,10 +13,7 @@ export default class EditorView {
     }
 
     mount(parent) {
-        const {
-            joplinDataService,
-            notebooks,
-        } = this.popupService;
+        const { joplinDataService, notebooks } = this.popupService;
 
         const html = `
         <div id="button-bar" class="text-start d-flex justify-content-between align-items-center">
@@ -58,7 +55,9 @@ export default class EditorView {
                 notebook.level * pad.length + notebook.title.length,
                 pad,
             );
-            notebookSelect.append(`<option value="${notebook.id}">${notebookTitle}</option>`);
+            notebookSelect.append(
+                `<option value="${notebook.id}">${notebookTitle}</option>`,
+            );
         });
         notebookSelect.val(this.notebookId);
 
@@ -94,39 +93,27 @@ export default class EditorView {
     }
 
     async load() {
-        const {
-            popupService,
-            renderer,
-        } = this;
-        const {
-            joplinDataService,
-        } = popupService;
-        const {
-            storageService,
-        } = joplinDataService;
+        const { popupService, renderer } = this;
+        const { joplinDataService } = popupService;
+        const { storageService } = joplinDataService;
 
         const noteId = popupService.currentTab.id;
         this.noteId = noteId;
 
-        const {
-            selectedNotebookId,
-        } = popupService;
+        const { selectedNotebookId } = popupService;
 
         const note = await joplinDataService.getNote(noteId);
         if (note === undefined) {
             renderer.template = await storageService.getTemplate();
             this.notebookId = selectedNotebookId;
             this.noteTitle = popupService.currentTab.title;
-            const {
+            const { url, title } = popupService.currentTab;
+            const { tag, tagId } = popupService;
+            this.noteContent = renderer.render({
                 url,
-                title,
-            } = popupService.currentTab;
-            const {
                 tag,
                 tagId,
-            } = popupService;
-            this.noteContent = renderer.render({
-                url, tag, tagId, title,
+                title,
             });
             this.noteAvailable = false;
         } else {
@@ -138,12 +125,14 @@ export default class EditorView {
     }
 
     async upsertNote() {
-        const {
-            popupService,
-            noteAvailable,
-        } = this;
+        const { popupService, noteAvailable } = this;
 
-        await popupService.upsertNote(this.noteId, this.noteTitle, this.noteContent, noteAvailable);
+        await popupService.upsertNote(
+            this.noteId,
+            this.noteTitle,
+            this.noteContent,
+            noteAvailable,
+        );
         if (!noteAvailable) {
             this.noteAvailable = true;
             this.setOpenJoplinLinkVisible();

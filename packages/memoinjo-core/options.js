@@ -2,6 +2,8 @@ import StorageService from "./services/storageservice.js";
 import JoplinDataService from "./services/joplindataservice.js";
 import { hasValue } from "./helper.js";
 import Constants from "./constants.js";
+import "./options.css";
+import "./lib/bower_components/bootstrap.min.css";
 
 const saveButton = $("#saveButton");
 const joplinApiKeyInput = $("#joplinApiKeyInput");
@@ -34,12 +36,17 @@ async function updateNotebooks() {
                 notebook.level * pad.length + notebook.title.length,
                 pad,
             );
-            notebookSelect.append(`<option value="${notebook.id}">${notebookTitle}</option>`);
+            notebookSelect.append(
+                `<option value="${notebook.id}">${notebookTitle}</option>`,
+            );
         });
 
         notebookSelect.val(selectedNotebookId);
         notebookSelect.prop("disabled", false);
-        openJoplinLink.attr("href", `joplin://x-callback-url/openFolder?id=${selectedNotebookId}`);
+        openJoplinLink.attr(
+            "href",
+            `joplin://x-callback-url/openFolder?id=${selectedNotebookId}`,
+        );
     } catch (e) {
         notebookSelect.empty();
         notebookSelect.append("<option>Unavailable</option>");
@@ -56,7 +63,10 @@ async function save() {
     joplin.apiToken = apiToken;
     const selectedNotebookId = notebookSelect.val();
     if (hasValue(selectedNotebookId)) {
-        await storageService.set(StorageService.SelectedNotebookId, selectedNotebookId);
+        await storageService.set(
+            StorageService.SelectedNotebookId,
+            selectedNotebookId,
+        );
     }
     setSaveButtionEnabled(false);
     await updateNotebooks();

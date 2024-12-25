@@ -4,6 +4,10 @@ export default class Renderer {
     }
 
     render(options) {
-        return this.template.replace(/<%=(?:"([^"]*)"|(.*?))%>/g, (item, qparam, param) => options[qparam?.trim()] || options[param?.trim()]);
+        return this.template.replace(
+            /<%=(?:"([^"]*)"|(.*?))%>/g,
+            (item, qparam, param) =>
+                options[qparam?.trim()] || options[param?.trim()],
+        );
     }
 }

@@ -1,12 +1,12 @@
-import BrowserService from "../packages/memoinjo-core/services/browserservice.js";
 import JoplinDataService from "../packages/memoinjo-core/services/joplindataservice.js";
 import PopupService from "../packages/memoinjo-core/services/popupservice.js";
 import StorageService from "../packages/memoinjo-core/services/storageservice.js";
 import PopupView from "../packages/memoinjo-core/views/popupview.js";
+import BrowserService from "../packages/memoinjo-core/services/browserservice";
 
 jest.mock("../packages/memoinjo-core/services/joplindataservice.js");
 jest.mock("../packages/memoinjo-core/services/storageservice.js");
-jest.mock("../packages/memoinjo-core/services/browserservice.js");
+jest.mock("../packages/memoinjo-core/services/browserservice");
 jest.mock("../packages/memoinjo-core/services/popupservice.js");
 
 function createPopupView() {
@@ -41,6 +41,8 @@ test("PopupView.load", async () => {
         id: "",
         title: "",
     };
-    popupView.popupService.joplinDataService.storageService.getTemplate.mockReturnValue("");
+    popupView.popupService.joplinDataService.storageService.getTemplate.mockReturnValue(
+        "",
+    );
     await popupView.load();
 });

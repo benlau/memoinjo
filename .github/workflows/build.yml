@@ -1,44 +1,45 @@
 name: Build
 
 on:
-  push:
-    branches: 
-    - main
-    - dev
-  pull_request:
-    branches: "*"
+    push:
+        branches:
+            - main
+            - dev
+    pull_request:
+        branches: "*"
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Install node
-        uses: actions/setup-node@v1
-        with:
-          node-version: "12.x"
-      - name: Get npm cache directory
-        id: npm-cache
-        run: |
-          echo "::set-output name=dir::$(npm config get cache)"
-      - uses: actions/cache@v2
-        with:
-          path: ${{ steps.npm-cache.outputs.dir }}
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-      - name: install dependencies
-        run: |
-          npm install -g bower
-      - name: Test the extension
-        run: |
-          make install
-          make bootstrap
-          npm run test
-          npm run lint
-          make pack
-      - uses: actions/upload-artifact@v3
-        with:
-          name: packages
-          path: dist/
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
+            - name: Install node
+              uses: actions/setup-node@v1
+              with:
+                  node-version: "20.x"
+            - name: Get npm cache directory
+              id: npm-cache
+              run: |
+                  echo "::set-output name=dir::$(npm config get cache)"
+            - uses: actions/cache@v2
+              with:
+                  path: ${{ steps.npm-cache.outputs.dir }}
+                  key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+                  restore-keys: |
+                      ${{ runner.os }}-node-
+            - name: install dependencies
+              run: |
+                  npm install -g bower
+            - name: Test the extension
+              run: |
+                  make install
+                  make bootstrap
+                  npm run test
+                  npm run lint
+                  npm run format
+                  make pack
+            - uses: actions/upload-artifact@v3
+              with:
+                  name: packages
+                  path: dist/

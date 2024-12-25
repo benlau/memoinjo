@@ -1,6 +1,4 @@
-import {
-    hasNoValue,
-} from "../helper.js";
+import { hasNoValue } from "../helper.js";
 import Renderer from "../renderer.js";
 import EditorView from "./editorview.js";
 import SearchingView from "./searchingview.js";
@@ -39,22 +37,21 @@ export default class PopupView {
             PopupView.LOADING_VIEW,
             PopupView.SEARCHING_VIEW,
         ];
-        this.views = ids.map((id) => ({
-            key: id,
-            value: $(id),
-        })).reduce((arr, item) => {
-            // eslint-disable-next-line
-            arr[item.key] = item.value;
-            return arr;
-        }, {});
+        this.views = ids
+            .map((id) => ({
+                key: id,
+                value: $(id),
+            }))
+            .reduce((arr, item) => {
+                arr[item.key] = item.value;
+                return arr;
+            }, {});
 
         this.editorView = this.views[PopupView.EDITOR_VIEW];
     }
 
     async start() {
-        const {
-            joplinDataService,
-        } = this.popupService;
+        const { joplinDataService } = this.popupService;
         try {
             await joplinDataService.load();
             if (hasNoValue(joplinDataService.apiToken)) {

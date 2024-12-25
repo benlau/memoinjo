@@ -2,11 +2,11 @@ import JoplinDataService from "../packages/memoinjo-core/services/joplindataserv
 import StorageService from "../packages/memoinjo-core/services/storageservice.js";
 import EditorView from "../packages/memoinjo-core/views/editorview.js";
 import PopupService from "../packages/memoinjo-core/services/popupservice.js";
-import BrowserService from "../packages/memoinjo-core/services/browserservice.js";
+import BrowserService from "../packages/memoinjo-core/services/browserservice";
 
 jest.mock("../packages/memoinjo-core/services/joplindataservice.js");
 jest.mock("../packages/memoinjo-core/services/storageservice.js");
-jest.mock("../packages/memoinjo-core/services/browserservice.js");
+jest.mock("../packages/memoinjo-core/services/browserservice");
 jest.mock("../packages/memoinjo-core/services/popupservice.js");
 
 function createEditorView() {
@@ -49,7 +49,9 @@ test("EditorView.load", async () => {
     editorView.popupService.currentTab = { id: "", title: "" };
     editorView.popupService.joplinDataService.getNote.mockReturnValue({});
 
-    editorView.popupService.joplinDataService.storageService.getTemplate.mockReturnValue("");
+    editorView.popupService.joplinDataService.storageService.getTemplate.mockReturnValue(
+        "",
+    );
 
     await editorView.load();
 });

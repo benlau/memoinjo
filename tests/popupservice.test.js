@@ -1,11 +1,11 @@
-import BrowserService from "../packages/memoinjo-core/services/browserservice.js";
+import BrowserService from "../packages/memoinjo-core/services/browserservice";
 import JoplinDataService from "../packages/memoinjo-core/services/joplindataservice.js";
 import PopupService from "../packages/memoinjo-core/services/popupservice.js";
 import StorageService from "../packages/memoinjo-core/services/storageservice.js";
 
 jest.mock("../packages/memoinjo-core/services/joplindataservice.js");
 jest.mock("../packages/memoinjo-core/services/storageservice.js");
-jest.mock("../packages/memoinjo-core/services/browserservice.js");
+jest.mock("../packages/memoinjo-core/services/browserservice");
 
 function createPopupService() {
     const joplinDataService = new JoplinDataService();
@@ -32,7 +32,9 @@ test("PopupService.load", async () => {
 
     popupService.joplinDataService.getNote.mockReturnValue({});
 
-    popupService.joplinDataService.storageService.getTemplate.mockReturnValue("");
+    popupService.joplinDataService.storageService.getTemplate.mockReturnValue(
+        "",
+    );
 
     await popupService.load();
 });
@@ -51,11 +53,7 @@ test("PopupService.breakdownUrl", async () => {
         "https://github.com",
     ]);
 
-    expect(
-        popupService.breakdownUrl(
-            "https://github.com/xxx/1",
-        ),
-    ).toEqual([
+    expect(popupService.breakdownUrl("https://github.com/xxx/1")).toEqual([
         "https://github.com/xxx/1",
         "https://github.com/xxx",
         "https://github.com",
@@ -87,8 +85,7 @@ test("PopupService.searchRelatedNotes should perform deduplication", async () =>
     const url = "https://github.com/xxx/1";
     const max = 100;
 
-    popupService.joplinDataService.searchNotes
-        .mockReturnValue([{ id: "1" }]);
+    popupService.joplinDataService.searchNotes.mockReturnValue([{ id: "1" }]);
 
     let result = [];
     await popupService.searchRelatedNotes(url, max, (notes) => {

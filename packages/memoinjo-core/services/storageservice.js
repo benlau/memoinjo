@@ -33,10 +33,15 @@ export default class StorageService {
     }
 
     async getTemplate() {
-        return await this.get(StorageService.Template) ?? Constants.DefaultTemplateValue;
+        return (
+            (await this.get(StorageService.Template)) ??
+            Constants.DefaultTemplateValue
+        );
     }
 
     async getTag() {
-        return await this.get(StorageService.Tag) ?? Constants.DefaultTagValue;
+        return (
+            (await this.get(StorageService.Tag)) ?? Constants.DefaultTagValue
+        );
     }
 }

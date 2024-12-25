@@ -1,4 +1,3 @@
-
 MEMOINJO_CORE_PATH=${PWD}/packages/memoinjo-core
 ASSETS_PATH=${MEMOINJO_CORE_PATH}/lib/bower_components
 
@@ -36,5 +35,14 @@ bootstrap-memoinjo-firefox:
 bootstrap-memoinjo-chrome:
 	ln -sfn ${MEMOINJO_CORE_PATH} ${PWD}/target/memoinjo-chrome/memoinjo
 
+.PHONY: build
+build:
+	npm run build
+
+.PHONY: clean
 clean:
-	rm -f target/memoinjo-chrome/memoinjo
+	rm -rf dist
+
+.PHONY: format
+format:
+	npm run format

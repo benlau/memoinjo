@@ -10,7 +10,9 @@ export function normalizeLink(link) {
     ];
     const url = new URL(link);
 
-    const hasForbiddedQuery = forbiddedQuery.some((query) => url.searchParams.has(query));
+    const hasForbiddedQuery = forbiddedQuery.some((query) =>
+        url.searchParams.has(query),
+    );
 
     if (!hasForbiddedQuery) {
         return link;

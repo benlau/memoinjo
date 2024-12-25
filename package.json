@@ -2,24 +2,39 @@
   "name": "memoinjo",
   "version": "1.0.0",
   "description": "Stick memo on any website and sync via Joplin",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "browser": "dist/index.umd.js",
+  "type": "module",
   "scripts": {
     "test": "jest --silent false --verbose false",
     "test:watch": "jest --watch --silent false --verbose false",
-    "lint": "eslint . --ext .js",
-    "lint:fix": "eslint . --ext .js --fix"
+    "lint": "eslint .",
+    "lint:fix": "eslint . --ext .js --fix",
+    "format": "prettier --write .",
+    "build": "rollup -c"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.16.12",
-    "@babel/eslint-parser": "^7.17.0",
+    "@babel/eslint-parser": "^7.25.9",
     "@babel/preset-env": "^7.16.11",
+    "@rollup/plugin-typescript": "^12.1.2",
+    "@typescript-eslint/eslint-plugin": "^8.19.0",
+    "@typescript-eslint/parser": "^8.19.0",
+    "@web/rollup-plugin-html": "^2.3.0",
     "babel-jest": "^27.4.6",
-    "eslint": "^8.8.0",
-    "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-plugin-import": "^2.25.4",
+    "eslint": "^9.0.0",
+    "eslint-plugin-import": "^2.31.0",
+    "globals": "^15.14.0",
     "jest": "^27.4.7",
-    "jest-fetch-mock": "^3.0.3"
+    "jest-fetch-mock": "^3.0.3",
+    "prettier": "^3.4.2",
+    "rollup": "^4.29.1",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-copy": "^3.5.0",
+    "rollup-plugin-html": "^0.2.1",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-postcss": "^4.0.2"
   }
 }

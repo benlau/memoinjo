@@ -11,14 +11,15 @@ export default class JoplinDataService {
 
     async load() {
         this.apiToken = await this.storageService.get(StorageService.ApiToken);
-        this.authToken = await this.storageService.get(StorageService.AuthToken);
+        this.authToken = await this.storageService.get(
+            StorageService.AuthToken,
+        );
     }
 
     async fetchData(url, options, body) {
         try {
             return await fetch(url, options, body);
         } catch (e) {
-            // eslint-disable-next-line
             console.error(e);
             e.type = "ConnectionFailed";
             throw e;
@@ -54,15 +55,18 @@ export default class JoplinDataService {
                 continue;
             }
             const json = await response.json();
-            const {
-                status,
-                token,
-            } = json;
+            const { status, token } = json;
             if (status === "accepted") {
                 this.apiToken = token;
                 this.authToken = undefined;
-                await this.storageService.set(StorageService.ApiToken, this.apiToken);
-                await this.storageService.set(StorageService.AuthToken, this.authToken);
+                await this.storageService.set(
+                    StorageService.ApiToken,
+                    this.apiToken,
+                );
+                await this.storageService.set(
+                    StorageService.AuthToken,
+                    this.authToken,
+                );
             }
             if (status === "rejected") {
                 await this.requestAuthToken();
@@ -72,7 +76,6 @@ export default class JoplinDataService {
     }
 
     async getNote(id) {
-        // eslint-disable-next-line
         const url = `${this.apiUrl}/notes/${id}?token=${this.apiToken}&fields=id,body,title,parent_id`;
         const response = await this.fetchData(url, {
             method: "GET",
@@ -226,16 +229,17 @@ export default class JoplinDataService {
         const json = await response.json();
         const { items: notebooks } = json;
         const createTree = (parentId) => {
-            const items = notebooks.filter(
-                (item) => item.parent_id === parentId,
-            ).map((item) => {
-                const subNotebooks = createTree(item.id);
-                return {
-                    id: item.id,
-                    title: item.title,
-                    subNotebooks,
-                };
-            }).sort((a, b) => (a.title < b.title ? -1 : 1));
+            const items = notebooks
+                .filter((item) => item.parent_id === parentId)
+                .map((item) => {
+                    const subNotebooks = createTree(item.id);
+                    return {
+                        id: item.id,
+                        title: item.title,
+                        subNotebooks,
+                    };
+                })
+                .sort((a, b) => (a.title < b.title ? -1 : 1));
             return items;
         };
 
@@ -253,8 +257,12 @@ export default class JoplinDataService {
         };
         travel(tree);
 
-        const storedNotebookId = await this.storageService.get(StorageService.SelectedNotebookId);
-        const selectedNotebookId = hasValue(storedNotebookId) ? storedNotebookId : [...sortedNotebooks].shift()?.id ?? "";
+        const storedNotebookId = await this.storageService.get(
+            StorageService.SelectedNotebookId,
+        );
+        const selectedNotebookId = hasValue(storedNotebookId)
+            ? storedNotebookId
+            : ([...sortedNotebooks].shift()?.id ?? "");
 
         return {
             notebooks: sortedNotebooks,
@@ -271,7 +279,6 @@ export default class JoplinDataService {
         let page = 1;
         let items = [];
         while (hasMore) {
-            // eslint-disable-next-line
             const url = `${this.apiUrl}/search?token=${this.apiToken}&query=${encodeURIComponent(keyword)}&page=${page}`;
 
             const response = await this.fetchData(url, {
@@ -283,7 +290,11 @@ export default class JoplinDataService {
             const json = await response.json();
 
             items = items.concat(json.items);
-            if (json.has_more) { page += 1; } else { hasMore = false; }
+            if (json.has_more) {
+                page += 1;
+            } else {
+                hasMore = false;
+            }
         }
         return items;
     }
