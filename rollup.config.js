@@ -4,6 +4,7 @@ import { rollupPluginHTML as html } from "@web/rollup-plugin-html";
 import copy from "rollup-plugin-copy";
 import typescript from "@rollup/plugin-typescript";
 import postcss from "rollup-plugin-postcss";
+import replace from "@rollup/plugin-replace";
 
 export default [
     {
@@ -23,8 +24,13 @@ export default [
             }),
             typescript({
                 module: "esnext",
+                jsx: "react",
             }),
             postcss(),
+            replace({
+                "process.env.NODE_ENV": JSON.stringify("production"),
+                preventAssignment: true,
+            }),
             copy({
                 targets: [
                     {
@@ -67,6 +73,10 @@ export default [
                 module: "esnext",
             }),
             postcss(),
+            replace({
+                "process.env.NODE_ENV": JSON.stringify("production"),
+                preventAssignment: true,
+            }),
         ],
     },
 
@@ -89,6 +99,10 @@ export default [
                 module: "esnext",
             }),
             postcss(),
+            replace({
+                "process.env.NODE_ENV": JSON.stringify("production"),
+                preventAssignment: true,
+            }),
         ],
     },
     {
@@ -110,6 +124,10 @@ export default [
                 module: "esnext",
             }),
             postcss(),
+            replace({
+                "process.env.NODE_ENV": JSON.stringify("production"),
+                preventAssignment: true,
+            }),
         ],
     },
 ];

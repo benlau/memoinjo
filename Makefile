@@ -46,3 +46,11 @@ clean:
 .PHONY: format
 format:
 	npm run format
+
+.PHONY: test
+test:
+	npm run test
+
+.PHONY: lint
+lint:
+	npm run lint

@@ -5,36 +5,7 @@
         <script src="./lib/bower_components/jquery.min.js"></script>
     </head>
     <body>
-        <div id="loading-view">
-            <div class="loading-bar mt-4"></div>
-            <div class="loading-bar mt-3"></div>
-            <div class="loading-editor mt-3"></div>
-        </div>
-        <div id="wizard-view" class="d-none">
-            <h2>Permission Needed</h2>
-            <p>
-                To access your data in Joplin, it needs your authorization.
-                Please
-                <a href="joplin://x-callback-url/openNote?id=none">open</a> the
-                Joplin desktop application and grant the permission.
-            </p>
-        </div>
-        <div id="joplin-web-clipper-error-view" class="d-none">
-            <h2>Unable to connect to Joplin Web Clipper</h2>
-            <p>
-                Please ensure that the Joplin Desktop is started and that the
-                clipper service is enabled in the configuration.
-            </p>
-            <p class="mt-2">
-                <a href="https://joplinapp.org/clipper/">More info</a>
-            </p>
-        </div>
-        <div id="searching-view" class="d-none"></div>
-        <div id="editor-view" class="d-none"></div>
-        <div id="error-view" class="d-none">
-            <h2 class="mb-2">Error</h2>
-            <pre><code id="errorMessage"></code></pre>
-        </div>
-        <script type="module" src="./popup.ts"></script>
+        <div id="editor-view"></div>
+        <script type="module" src="./popup.tsx"></script>
     </body>
 </html>
