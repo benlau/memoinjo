@@ -1,12 +1,56 @@
-import resolve from "rollup-plugin-node-resolve";
-import commonjs from "rollup-plugin-commonjs";
-import { rollupPluginHTML as html } from "@web/rollup-plugin-html";
-import copy from "rollup-plugin-copy";
-import typescript from "@rollup/plugin-typescript";
-import postcss from "rollup-plugin-postcss";
-import replace from "@rollup/plugin-replace";
+const resolve = require("rollup-plugin-node-resolve");
+const commonjs = require("rollup-plugin-commonjs");
+const { rollupPluginHTML: html } = require("@web/rollup-plugin-html");
+const copy = require("rollup-plugin-copy");
+const typescript = require("@rollup/plugin-typescript");
+const postcss = require("rollup-plugin-postcss");
+const replace = require("@rollup/plugin-replace");
 
-export default [
+const plugins = [
+    resolve(),
+    commonjs(),
+    html({
+        js: true,
+        css: true,
+    }),
+    typescript({
+        module: "esnext",
+        jsx: "react",
+    }),
+    postcss({
+        extract: false,
+        plugins: [
+            require("tailwindcss"),
+            require("autoprefixer"),
+        ],
+    }),
+    replace({
+        "process.env.NODE_ENV": JSON.stringify("production"),
+        preventAssignment: true,
+    }),
+    copy({
+        targets: [
+            {
+                src: "target/memoinjo-chrome/manifest.json",
+                dest: "dist/chrome",
+            },
+            {
+                src: "target/memoinjo-firefox/manifest.json",
+                dest: "dist/firefox",
+            },
+            {
+                src: "packages/memoinjo-core/icon128.png",
+                dest: "dist/chrome/memoinjo",
+            },
+            {
+                src: "packages/memoinjo-core/icon128.png",
+                dest: "dist/firefox/memoinjo",
+            },
+        ],
+    }),
+]
+
+module.exports = [
     {
         input: "packages/memoinjo-core/popup.html",
         output: {
@@ -16,44 +60,25 @@ export default [
             name: "MemoInjoPopup",
         },
         plugins: [
-            resolve(),
-            commonjs(),
-            html({
-                js: true,
-                css: true,
-            }),
-            typescript({
-                module: "esnext",
-                jsx: "react",
-            }),
-            postcss(),
-            replace({
-                "process.env.NODE_ENV": JSON.stringify("production"),
-                preventAssignment: true,
-            }),
-            copy({
-                targets: [
-                    {
-                        src: "target/memoinjo-chrome/manifest.json",
-                        dest: "dist/chrome",
-                    },
-                    {
-                        src: "target/memoinjo-firefox/manifest.json",
-                        dest: "dist/firefox",
-                    },
-                    {
-                        src: "packages/memoinjo-core/icon128.png",
-                        dest: "dist/chrome/memoinjo",
-                    },
-                    {
-                        src: "packages/memoinjo-core/icon128.png",
-                        dest: "dist/firefox/memoinjo",
-                    },
+            ...plugins,
+        ],
+    },
+    {
+        input: "src/styles/tailwind.css",
+        output: {
+            file: "dist/chrome/popup/tailwind.css",
+            format: "es",
+        },
+        plugins: [
+            postcss({
+                extract: true,
+                plugins: [
+                    require("tailwindcss"),
+                    require("autoprefixer"),
                 ],
             }),
         ],
     },
-
     {
         input: "packages/memoinjo-core/popup.html",
         output: {
@@ -63,20 +88,7 @@ export default [
             name: "MemoInjoPopup",
         },
         plugins: [
-            resolve(),
-            commonjs(),
-            html({
-                js: true,
-                css: true,
-            }),
-            typescript({
-                module: "esnext",
-            }),
-            postcss(),
-            replace({
-                "process.env.NODE_ENV": JSON.stringify("production"),
-                preventAssignment: true,
-            }),
+            ...plugins,
         ],
     },
 
@@ -89,20 +101,7 @@ export default [
             name: "MemoInjoOptions",
         },
         plugins: [
-            resolve(),
-            commonjs(),
-            html({
-                js: true,
-                css: true,
-            }),
-            typescript({
-                module: "esnext",
-            }),
-            postcss(),
-            replace({
-                "process.env.NODE_ENV": JSON.stringify("production"),
-                preventAssignment: true,
-            }),
+            ...plugins,
         ],
     },
     {
@@ -114,20 +113,7 @@ export default [
             name: "MemoInjoOptions",
         },
         plugins: [
-            resolve(),
-            commonjs(),
-            html({
-                js: true,
-                css: true,
-            }),
-            typescript({
-                module: "esnext",
-            }),
-            postcss(),
-            replace({
-                "process.env.NODE_ENV": JSON.stringify("production"),
-                preventAssignment: true,
-            }),
+            ...plugins,
         ],
     },
 ];
