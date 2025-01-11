@@ -102,12 +102,15 @@ export function PopupView({ popupService }: Props) {
             )}
             {view === WIZARD_VIEW && (
                 <>
-                    <div id="wizard-view" className="d-none">
+                    <div id="wizard-view">
                         <h2>Permission Needed</h2>
                         <p>
                             To access your data in Joplin, it needs your
-                            authorization. Please
-                            <a href="joplin://x-callback-url/openNote?id=none">
+                            authorization. Please{" "}
+                            <a
+                                href="joplin://x-callback-url/openNote?id=none"
+                                className="text-blue-500 underline"
+                            >
                                 open
                             </a>{" "}
                             the Joplin desktop application and grant the
@@ -118,7 +121,7 @@ export function PopupView({ popupService }: Props) {
             )}
             {view === JOPLIN_UNAVAILABLE_VIEW && (
                 <>
-                    <div id="joplin-web-clipper-error-view" className="d-none">
+                    <div id="joplin-web-clipper-error-view">
                         <h2>Unable to connect to Joplin Web Clipper</h2>
                         <p>
                             Please ensure that the Joplin Desktop is started and
@@ -150,7 +153,7 @@ export function PopupView({ popupService }: Props) {
 
             {view === ERROR_PANEL_VIEW && (
                 <>
-                    <div id="error-view" className="d-none">
+                    <div id="error-view">
                         <h2 className="mb-2">Error</h2>
                         <pre>
                             <code id="errorMessage">{error}</code>

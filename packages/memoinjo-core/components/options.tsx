@@ -146,7 +146,7 @@ const Options: React.FC = () => {
                         <div className="border-b p-4 bg-gray-100">
                             <div className="flex justify-between items-center">
                                 <div className="w-2/3">
-                                    <h3 className="text-xl font-semibold m-0">
+                                    <h3 className="text-2xl font-semibold m-0">
                                         MemoInjo Options
                                     </h3>
                                 </div>
@@ -170,7 +170,7 @@ const Options: React.FC = () => {
                                 <li className="py-4">
                                     <div className="flex">
                                         <div className="w-1/2 mt-2">
-                                            <h6 className="font-semibold">
+                                            <h6 className="font-normal text-sm">
                                                 Joplin API Key
                                             </h6>
                                         </div>
@@ -191,7 +191,7 @@ const Options: React.FC = () => {
                                 <li className="py-4">
                                     <div className="flex">
                                         <div className="w-1/2 mt-2">
-                                            <h6 className="font-semibold">
+                                            <h6 className="font-normal text-sm">
                                                 Default Notebook
                                             </h6>
                                         </div>
@@ -244,7 +244,7 @@ const Options: React.FC = () => {
                                 <li className="py-4">
                                     <div className="flex">
                                         <div className="w-2/3 mt-2">
-                                            <h6 className="font-semibold">
+                                            <h6 className="font-normal text-sm">
                                                 Default Tag
                                             </h6>
                                         </div>
@@ -264,7 +264,7 @@ const Options: React.FC = () => {
 
                                 <li className="py-4">
                                     <div>
-                                        <h6 className="font-semibold mb-3">
+                                        <h6 className="font-normal text-sm mb-3">
                                             Memo Template
                                         </h6>
                                         <textarea

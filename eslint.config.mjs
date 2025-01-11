@@ -41,7 +41,6 @@ export default [
                 ...globals.jest,
                 ...globals.browser,
                 ...globals.webextensions,
-                ...globals.jquery,
                 AudioWorkletGlobalScope: "readonly",
             },
 

@@ -28,13 +28,9 @@ jobs:
                   key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
                   restore-keys: |
                       ${{ runner.os }}-node-
-            - name: install dependencies
-              run: |
-                  npm install -g bower
             - name: Test the extension
               run: |
                   make install
-                  make bootstrap
                   npm run test
                   npm run lint
                   npm run format

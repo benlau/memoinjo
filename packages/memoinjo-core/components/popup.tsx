@@ -1,6 +1,4 @@
 import React from "react";
-import "../lib/bower_components/bootstrap.min.css";
-import "../lib/bower_components/mdi/css/materialdesignicons.min.css";
 import "../popup.css";
 
 import BrowserService from "../services/browserservice";

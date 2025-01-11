@@ -1,5 +1,4 @@
 import React from "react";
-import Renderer from "../renderer.js";
 import PopupService from "../services/popupservice";
 import { useAutosize } from "../hooks/autosize";
 
@@ -14,7 +13,6 @@ export function EditorView({ popupService, onSearchClicked }: Props) {
     const [noteAvailable, setNoteAvailable] = React.useState(false);
     const [noteContent, setNoteContent] = React.useState("");
     const [notebookId, setNotebookId] = React.useState("");
-    const renderer = React.useMemo(() => new Renderer(), []);
     const { joplinDataService } = popupService;
     const { storageService } = joplinDataService;
     const { notebooks } = popupService;
@@ -40,19 +38,10 @@ export function EditorView({ popupService, onSearchClicked }: Props) {
 
         const note = await joplinDataService.getNote(newNoteId);
         if (note === undefined) {
-            renderer.template = await storageService.getTemplate();
             setNotebookId(selectedNotebookId);
             setNoteTitle(popupService.currentTab.title);
             const { url, title } = popupService.currentTab;
             const { tag, tagId } = popupService;
-            setNoteContent(
-                renderer.render({
-                    url,
-                    tag,
-                    tagId,
-                    title,
-                }),
-            );
             setNoteAvailable(false);
         } else {
             setNotebookId(note.parent_id);
@@ -62,13 +51,11 @@ export function EditorView({ popupService, onSearchClicked }: Props) {
         }
     }, [
         popupService,
-        renderer,
         setNotebookId,
         setNoteTitle,
         setNoteContent,
         setNoteAvailable,
         joplinDataService,
-        storageService,
     ]);
 
     React.useEffect(() => {
@@ -80,7 +67,7 @@ export function EditorView({ popupService, onSearchClicked }: Props) {
         <>
             <div
                 id="button-bar"
-                className="text-start d-flex justify-content-between align-items-center"
+                className="text-left flex justify-between items-center"
             >
                 {!noteAvailable ? (
                     <a
@@ -120,7 +107,7 @@ export function EditorView({ popupService, onSearchClicked }: Props) {
 
             <select
                 id="notebook-select"
-                className="form-select form-select-sm mb-2"
+                className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 value={notebookId}
                 onChange={async (e) => {
                     const newNotebookId = e.target.value;
@@ -139,7 +126,7 @@ export function EditorView({ popupService, onSearchClicked }: Props) {
             </select>
 
             <input
-                className="form-control"
+                className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                 id="title-input"
                 value={noteTitle}
                 onChange={async (e) => {
@@ -149,7 +136,7 @@ export function EditorView({ popupService, onSearchClicked }: Props) {
                 placeholder=""
             />
             <textarea
-                className="form-control"
+                className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                 id="note-editor"
                 value={noteContent}
                 onChange={async (e) => {
