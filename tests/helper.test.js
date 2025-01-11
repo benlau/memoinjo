@@ -1,4 +1,4 @@
-import { normalizeLink } from "../packages/memoinjo-core/helper.js";
+import { normalizeLink } from "../packages/memoinjo-core/helper";
 
 test("normalizeLink", () => {
     expect(normalizeLink("https://domain-without-query")).toBe(

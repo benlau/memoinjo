@@ -7,6 +7,7 @@ import { FlatCompat } from "@eslint/eslintrc";
 import { ESLint } from "eslint";
 import typescriptEslintPlugin from "@typescript-eslint/eslint-plugin";
 import typescriptParser from "@typescript-eslint/parser";
+import reactHooksPlugin from "eslint-plugin-react-hooks";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -32,6 +33,7 @@ export default [
         files: ["**/*.js", "**/*.ts", "**/*.jsx", "**/*.tsx"],
         plugins: {
             "@typescript-eslint": typescriptEslintPlugin,
+            "react-hooks": reactHooksPlugin,
         },
 
         languageOptions: {
@@ -51,6 +53,8 @@ export default [
         rules: {
             indent: ["error", 4],
             quotes: [2, "double"],
+            "react-hooks/rules-of-hooks": "error",
+            "react-hooks/exhaustive-deps": "warn",
 
             "no-promise-executor-return": 0,
             "consistent-return": 0,

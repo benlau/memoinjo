@@ -1,4 +1,4 @@
-import Constants from "../constants.js";
+import Constants from "../constants";
 
 export default class StorageService {
     static ApiToken = "ApiToken";
@@ -11,11 +11,9 @@ export default class StorageService {
 
     static SelectedNotebookId = "SelectedNotebookId";
 
-    constructor(storageRepo) {
-        this.storageRepo = storageRepo;
-    }
+    constructor() {}
 
-    async get(key) {
+    async get(key: string): Promise<string | number | null> {
         return new Promise((resolve) => {
             // Firefox works
             chrome.storage.local.get([key], (result) => {
@@ -27,7 +25,7 @@ export default class StorageService {
     async set(key, value) {
         return new Promise((resolve) => {
             chrome.storage.local.set({ [key]: value }, () => {
-                resolve();
+                resolve(value);
             });
         });
     }

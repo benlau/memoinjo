@@ -19,10 +19,7 @@ const plugins = [
     }),
     postcss({
         extract: false,
-        plugins: [
-            require("tailwindcss"),
-            require("autoprefixer"),
-        ],
+        plugins: [require("tailwindcss"), require("autoprefixer")],
     }),
     replace({
         "process.env.NODE_ENV": JSON.stringify("production"),
@@ -48,7 +45,7 @@ const plugins = [
             },
         ],
     }),
-]
+];
 
 module.exports = [
     {
@@ -59,9 +56,7 @@ module.exports = [
             sourcemap: true,
             name: "MemoInjoPopup",
         },
-        plugins: [
-            ...plugins,
-        ],
+        plugins: [...plugins],
     },
     {
         input: "src/styles/tailwind.css",
@@ -72,10 +67,7 @@ module.exports = [
         plugins: [
             postcss({
                 extract: true,
-                plugins: [
-                    require("tailwindcss"),
-                    require("autoprefixer"),
-                ],
+                plugins: [require("tailwindcss"), require("autoprefixer")],
             }),
         ],
     },
@@ -87,9 +79,7 @@ module.exports = [
             sourcemap: true,
             name: "MemoInjoPopup",
         },
-        plugins: [
-            ...plugins,
-        ],
+        plugins: [...plugins],
     },
 
     {
@@ -100,9 +90,7 @@ module.exports = [
             sourcemap: true,
             name: "MemoInjoOptions",
         },
-        plugins: [
-            ...plugins,
-        ],
+        plugins: [...plugins],
     },
     {
         input: "packages/memoinjo-core/options.html",
@@ -112,8 +100,6 @@ module.exports = [
             sourcemap: true,
             name: "MemoInjoOptions",
         },
-        plugins: [
-            ...plugins,
-        ],
+        plugins: [...plugins],
     },
 ];

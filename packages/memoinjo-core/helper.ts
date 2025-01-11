@@ -1,4 +1,4 @@
-export function normalizeLink(link) {
+export function normalizeLink(link: string): string {
     const forbiddedQuery = [
         "fbclid",
         "gclid",

@@ -1,7 +1,31 @@
-import StorageService from "./storageservice.js";
-import { hasValue, hasNoValue, sha256 } from "../helper.js";
+import StorageService from "./storageservice";
+import { hasValue, hasNoValue, sha256 } from "../helper";
+
+export type Note = {
+    id: string;
+    title: string;
+    body: string;
+    parent_id: string;
+};
+
+export type NotebookNode = {
+    id: string;
+    title: string;
+    subNotebooks: NotebookNode[];
+};
+
+export type Notebook = {
+    id: string;
+    title: string;
+    level: number;
+};
 
 export default class JoplinDataService {
+    private apiToken: string | undefined;
+    private apiUrl: string;
+    private authToken: string | undefined;
+    private storageService: StorageService;
+
     constructor(storageService = new StorageService()) {
         this.apiToken = undefined;
         this.apiUrl = "http://localhost:41184";
@@ -10,18 +34,24 @@ export default class JoplinDataService {
     }
 
     async load() {
-        this.apiToken = await this.storageService.get(StorageService.ApiToken);
-        this.authToken = await this.storageService.get(
+        this.apiToken = (await this.storageService.get(
+            StorageService.ApiToken,
+        )) as string | undefined;
+        this.authToken = (await this.storageService.get(
             StorageService.AuthToken,
-        );
+        )) as string | undefined;
     }
 
-    async fetchData(url, options, body) {
+    setApiToken(apiToken: string) {
+        this.apiToken = apiToken;
+    }
+
+    async fetchData(url, options) {
         try {
-            return await fetch(url, options, body);
+            return await fetch(url, options);
         } catch (e) {
             console.error(e);
-            e.type = "ConnectionFailed";
+            (e as any).type = "ConnectionFailed";
             throw e;
         }
     }
@@ -218,17 +248,23 @@ export default class JoplinDataService {
          */
     }
 
-    async getNotebooks() {
+    async getNotebooks(): Promise<{
+        notebooks: Notebook[];
+        selectedNotebookId: string;
+    }> {
         const url = `${this.apiUrl}/folders?token=${this.apiToken}`;
         const response = await this.fetchData(url, {
             method: "GET",
         });
         if (!response.ok) {
-            return [];
+            return {
+                notebooks: [],
+                selectedNotebookId: "",
+            };
         }
         const json = await response.json();
         const { items: notebooks } = json;
-        const createTree = (parentId) => {
+        const createTree = (parentId: string): NotebookNode[] => {
             const items = notebooks
                 .filter((item) => item.parent_id === parentId)
                 .map((item) => {
@@ -243,9 +279,9 @@ export default class JoplinDataService {
             return items;
         };
 
-        const tree = createTree("");
-        const sortedNotebooks = [];
-        const travel = (list, level = 0) => {
+        const tree: NotebookNode[] = createTree("");
+        const sortedNotebooks: Notebook[] = [];
+        const travel = (list: NotebookNode[], level = 0) => {
             list.forEach((item) => {
                 sortedNotebooks.push({
                     id: item.id,
@@ -266,7 +302,7 @@ export default class JoplinDataService {
 
         return {
             notebooks: sortedNotebooks,
-            selectedNotebookId,
+            selectedNotebookId: selectedNotebookId as string,
         };
     }
 
@@ -274,7 +310,7 @@ export default class JoplinDataService {
         return (await sha256(url)).slice(0, 32);
     }
 
-    async searchNotes(keyword) {
+    async searchNotes(keyword): Promise<Note[]> {
         let hasMore = true;
         let page = 1;
         let items = [];

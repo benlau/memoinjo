@@ -1,6 +1,22 @@
-import { normalizeLink, hasValue } from "../helper.js";
+import { normalizeLink, hasValue } from "../helper";
 
 export default class PopupService {
+    joplinDataService: any;
+    browserService: any;
+    tagId: string;
+    tag: string;
+    selectedNotebookId: string;
+    currentTab: {
+        title: string;
+        url: string;
+        id: string;
+    };
+    notebooks: {
+        id: string;
+        title: string;
+        level: number;
+    }[];
+
     constructor(joplinDataService, browserService) {
         this.joplinDataService = joplinDataService;
         this.browserService = browserService;
@@ -46,8 +62,8 @@ export default class PopupService {
         this.selectedNotebookId = selectedNotebookId;
     }
 
-    breakdownUrl(url) {
-        const res = [];
+    breakdownUrl(url: string) {
+        const res = [] as string[];
         res.push(normalizeLink(url));
 
         const u = new URL(url);
@@ -95,7 +111,7 @@ export default class PopupService {
         }
     }
 
-    async searchRelatedNotes(url, max, callback) {
+    async searchRelatedNotes(url, max, callback): Promise<number> {
         const { joplinDataService } = this;
 
         const urls = this.breakdownUrl(url);
