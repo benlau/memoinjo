@@ -3,6 +3,7 @@ import { EditorView } from "./editorview";
 import { SearchingView } from "./searchingview.js";
 import PopupService from "../services/popupservice.js";
 import React from "react";
+import "./popup.css";
 
 const WIZARD_VIEW = "#wizard-view";
 const JOPLIN_UNAVAILABLE_VIEW = "#joplin-web-clipper-error-view";

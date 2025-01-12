@@ -1,6 +1,6 @@
-import JoplinDataService from "../packages/memoinjo-core/services/joplindataservice";
+import JoplinDataService from "../src/services/joplindataservice";
 
-jest.mock("../packages/memoinjo-core/services/storageservice");
+jest.mock("../src/services/storageservice");
 
 beforeEach(() => {
     fetch.resetMocks();

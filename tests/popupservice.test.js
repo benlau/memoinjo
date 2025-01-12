@@ -1,11 +1,11 @@
-import BrowserService from "../packages/memoinjo-core/services/browserservice";
-import JoplinDataService from "../packages/memoinjo-core/services/joplindataservice";
-import PopupService from "../packages/memoinjo-core/services/popupservice";
-import StorageService from "../packages/memoinjo-core/services/storageservice";
+import BrowserService from "../src/services/browserservice";
+import JoplinDataService from "../src/services/joplindataservice";
+import PopupService from "../src/services/popupservice";
+import StorageService from "../src/services/storageservice";
 
-jest.mock("../packages/memoinjo-core/services/joplindataservice.ts");
-jest.mock("../packages/memoinjo-core/services/storageservice.ts");
-jest.mock("../packages/memoinjo-core/services/browserservice");
+jest.mock("../src/services/joplindataservice");
+jest.mock("../src/services/storageservice");
+jest.mock("../src/services/browserservice");
 
 function createPopupService() {
     const joplinDataService = new JoplinDataService();

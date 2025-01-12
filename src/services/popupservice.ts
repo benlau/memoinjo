@@ -1,4 +1,5 @@
 import { normalizeLink, hasValue } from "../helper";
+import { Notebook } from "./joplindataservice";
 
 export default class PopupService {
     joplinDataService: any;
@@ -11,11 +12,7 @@ export default class PopupService {
         url: string;
         id: string;
     };
-    notebooks: {
-        id: string;
-        title: string;
-        level: number;
-    }[];
+    notebooks: Notebook[];
 
     constructor(joplinDataService, browserService) {
         this.joplinDataService = joplinDataService;

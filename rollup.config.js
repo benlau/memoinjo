@@ -36,11 +36,11 @@ const plugins = [
                 dest: "dist/firefox",
             },
             {
-                src: "packages/memoinjo-core/icon128.png",
+                src: "src/icon128.png",
                 dest: "dist/chrome/memoinjo",
             },
             {
-                src: "packages/memoinjo-core/icon128.png",
+                src: "src/icon128.png",
                 dest: "dist/firefox/memoinjo",
             },
         ],
@@ -49,7 +49,7 @@ const plugins = [
 
 module.exports = [
     {
-        input: "packages/memoinjo-core/popup.html",
+        input: "src/popup.html",
         output: {
             dir: "dist/chrome/popup",
             format: "iife",
@@ -58,21 +58,21 @@ module.exports = [
         },
         plugins: [...plugins],
     },
+    // {
+    //     input: "src/styles/tailwind.css",
+    //     output: {
+    //         file: "dist/chrome/popup/tailwind.css",
+    //         format: "es",
+    //     },
+    //     plugins: [
+    //         postcss({
+    //             extract: true,
+    //             plugins: [require("tailwindcss"), require("autoprefixer")],
+    //         }),
+    //     ],
+    // },
     {
-        input: "src/styles/tailwind.css",
-        output: {
-            file: "dist/chrome/popup/tailwind.css",
-            format: "es",
-        },
-        plugins: [
-            postcss({
-                extract: true,
-                plugins: [require("tailwindcss"), require("autoprefixer")],
-            }),
-        ],
-    },
-    {
-        input: "packages/memoinjo-core/popup.html",
+        input: "src/popup.html",
         output: {
             dir: "dist/firefox/popup",
             format: "iife",
@@ -83,7 +83,7 @@ module.exports = [
     },
 
     {
-        input: "packages/memoinjo-core/options.html",
+        input: "src/options.html",
         output: {
             dir: "dist/chrome/options",
             format: "iife",
@@ -93,7 +93,7 @@ module.exports = [
         plugins: [...plugins],
     },
     {
-        input: "packages/memoinjo-core/options.html",
+        input: "src/options.html",
         output: {
             dir: "dist/firefox/options",
             format: "iife",

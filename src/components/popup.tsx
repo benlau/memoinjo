@@ -1,5 +1,4 @@
 import React from "react";
-import "../popup.css";
 
 import BrowserService from "../services/browserservice";
 import JoplinDataService from "../services/joplindataservice";
