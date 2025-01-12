@@ -1,6 +1,7 @@
 import React from "react";
 import { useAutosize } from "../hooks/autosize";
 import { usePopupContext } from "../contexts/popupcontext";
+import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 
 function padSpace(title: string, level: number) {
     const pad = "&nbsp;&nbsp;&nbsp;&nbsp;";
@@ -67,7 +68,7 @@ export function EditorView() {
                     }}
                 >
                     <h5 className="mb-0">
-                        <i className="mdi mdi-magnify"></i>
+                        <MagnifyingGlassIcon />
                     </h5>
                 </a>
             </div>

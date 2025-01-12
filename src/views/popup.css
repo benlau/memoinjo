@@ -38,26 +38,6 @@ body {
     text-decoration: none;
 }
 
-/* .icon-button {
-    text-decoration: none;
-    color: #212529;
-}
-
-.icon-button:hover {
-    text-decoration: none;
-    color: #7f212529;
-}
-
-.icon-button:visited {
-    text-decoration: none;
-    color: #7f212529;
-}
-
-.icon-button:active {
-    text-decoration: none;
-    color: #7f212529;
-} */
-
 @keyframes fadein-animaiton {
     0% {
         opacity: 0;

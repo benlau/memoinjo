@@ -1,5 +1,6 @@
 import React from "react";
 import { Note } from "../services/joplindataservice";
+import { ArrowLeftIcon } from "@radix-ui/react-icons";
 const MAX_NOTES = 50;
 
 export function SearchingView({ popupService, onBackClicked }) {
@@ -27,16 +28,16 @@ export function SearchingView({ popupService, onBackClicked }) {
 
     return (
         <div>
-            <div>
+            <div className="flex flex-row items-center">
                 <a
                     href="#"
-                    className="icon-button"
+                    className="text-[#212529] no-underline hover:text-[#7f212529] visited:text-[#7f212529] active:text-[#7f212529]"
                     onClick={(e) => {
                         e.preventDefault();
                         onBackClicked();
                     }}
                 >
-                    <i className="mdi mdi-arrow-left"></i>
+                    <ArrowLeftIcon />
                 </a>
                 <span className="ml-1">Related Memos</span>
             </div>
