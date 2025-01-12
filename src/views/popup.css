@@ -38,7 +38,7 @@ body {
     text-decoration: none;
 }
 
-.icon-button {
+/* .icon-button {
     text-decoration: none;
     color: #212529;
 }
@@ -56,7 +56,7 @@ body {
 .icon-button:active {
     text-decoration: none;
     color: #7f212529;
-}
+} */
 
 @keyframes fadein-animaiton {
     0% {

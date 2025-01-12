@@ -1,96 +1,23 @@
-import { hasNoValue } from "../helper.js";
+import React from "react";
+import {
+    EDITOR_VIEW,
+    ERROR_PANEL_VIEW,
+    JOPLIN_UNAVAILABLE_VIEW,
+    LOADING_VIEW,
+    SEARCHING_VIEW,
+    usePopupContext,
+    WIZARD_VIEW,
+} from "../contexts/popupcontext";
 import { EditorView } from "./editorview";
 import { SearchingView } from "./searchingview.js";
-import PopupService from "../services/popupservice.js";
-import React from "react";
 import "./popup.css";
 
-const WIZARD_VIEW = "#wizard-view";
-const JOPLIN_UNAVAILABLE_VIEW = "#joplin-web-clipper-error-view";
-const ERROR_PANEL_VIEW = "#error-view";
-const EDITOR_VIEW = "#editor-view";
-const LOADING_VIEW = "#loading-view";
-const SEARCHING_VIEW = "#searching-view";
-
-export type Props = {
-    popupService: PopupService;
-};
-
-export function PopupView({ popupService }: Props) {
-    const [view, setView] = React.useState(LOADING_VIEW);
-    const [error, setError] = React.useState(null);
-
-    const show = React.useCallback((view) => {
-        setView(view);
-    }, []);
-
-    const showError = React.useCallback(
-        (e) => {
-            if (e.type === "ConnectionFailed") {
-                show(JOPLIN_UNAVAILABLE_VIEW);
-            } else {
-                show(ERROR_PANEL_VIEW);
-                setError(e);
-            }
-        },
-        [show],
-    );
-
-    const onSearchClicked = React.useCallback(() => {
-        show(SEARCHING_VIEW);
-    }, [show]);
-
-    const forceRedraw = React.useCallback(() => {
-        const fontFaceSheet = new CSSStyleSheet();
-        fontFaceSheet.insertRule(`
-        @keyframes redraw {
-          0% {
-            opacity: 1;
-          }
-          100% {
-            opacity: .99;
-          }
-        }
-      `);
-        fontFaceSheet.insertRule(`
-        html {
-          animation: redraw 1s linear infinite;
-        }
-      `);
-        document.adoptedStyleSheets = [
-            ...document.adoptedStyleSheets,
-            fontFaceSheet,
-        ];
-    }, []);
+export function PopupView() {
+    const { popupService, show, view, error } = usePopupContext();
 
     const onBackClicked = React.useCallback(() => {
         show(EDITOR_VIEW);
     }, [show]);
-
-    const load = React.useCallback(async () => {
-        await popupService.load();
-    }, [popupService]);
-
-    React.useEffect(() => {
-        const start = async () => {
-            const { joplinDataService } = popupService;
-            try {
-                await joplinDataService.load();
-                if (hasNoValue(joplinDataService.apiToken)) {
-                    show(WIZARD_VIEW);
-                    await joplinDataService.requestPermission();
-                    show(LOADING_VIEW);
-                }
-                await load();
-                show(EDITOR_VIEW);
-            } catch (e) {
-                showError(e);
-            }
-            forceRedraw();
-        };
-
-        start();
-    }, [popupService, show, showError, load, forceRedraw]);
 
     return (
         <div id="popup">
@@ -137,21 +64,15 @@ export function PopupView({ popupService }: Props) {
                     </div>
                 </>
             )}
-
             {view === SEARCHING_VIEW && (
                 <SearchingView
                     popupService={popupService}
                     onBackClicked={onBackClicked}
                 />
             )}
-
             {view === EDITOR_VIEW && (
-                <EditorView
-                    popupService={popupService}
-                    onSearchClicked={onSearchClicked}
-                />
+                <EditorView/>
             )}
-
             {view === ERROR_PANEL_VIEW && (
                 <>
                     <div id="error-view">

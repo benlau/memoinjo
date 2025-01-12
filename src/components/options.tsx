@@ -50,7 +50,7 @@ export function useOptionsState() {
             }
             setNotebooks(notebooks);
             setSelectedNotebookId(selectedNotebookId);
-        } catch (e) {}
+        } catch {}
     }, [joplin]);
 
     const save = React.useCallback(async () => {

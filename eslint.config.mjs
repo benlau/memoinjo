@@ -54,6 +54,10 @@ export default [
             quotes: [2, "double"],
             "react-hooks/rules-of-hooks": "error",
             "react-hooks/exhaustive-deps": "warn",
+            "no-unused-vars": [
+                "warn",
+                { vars: "all", args: "after-used", ignoreRestSiblings: false },
+            ],
 
             "no-promise-executor-return": 0,
             "consistent-return": 0,

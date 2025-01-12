@@ -1,67 +1,34 @@
 import React from "react";
-import PopupService from "../services/popupservice";
 import { useAutosize } from "../hooks/autosize";
+import { usePopupContext } from "../contexts/popupcontext";
 
-type Props = {
-    popupService: PopupService;
-    onSearchClicked: () => void;
-};
+function padSpace(title: string, level: number) {
+    const pad = "&nbsp;&nbsp;&nbsp;&nbsp;";
+    return title.padStart(level * pad.length + title.length, pad);
+}
 
-export function EditorView({ popupService, onSearchClicked }: Props) {
-    const [noteId, setNoteId] = React.useState("");
-    const [noteTitle, setNoteTitle] = React.useState("");
-    const [noteAvailable, setNoteAvailable] = React.useState(false);
-    const [noteContent, setNoteContent] = React.useState("");
-    const [notebookId, setNotebookId] = React.useState("");
-    const { joplinDataService } = popupService;
-    const { storageService } = joplinDataService;
-    const { notebooks } = popupService;
-    const textareaRef = useAutosize();
-
-    const upsertNote = React.useCallback(async () => {
-        await popupService.upsertNote(
-            noteId,
-            noteTitle,
-            noteContent,
-            noteAvailable,
-        );
-        if (!noteAvailable) {
-            setNoteAvailable(true);
-        }
-    }, [noteId, noteTitle, noteContent, noteAvailable, popupService]);
-
-    const load = React.useCallback(async () => {
-        const newNoteId = popupService.currentTab.id;
-        setNoteId(newNoteId);
-
-        const { selectedNotebookId } = popupService;
-
-        const note = await joplinDataService.getNote(newNoteId);
-        if (note === undefined) {
-            setNotebookId(selectedNotebookId);
-            setNoteTitle(popupService.currentTab.title);
-            const { url, title } = popupService.currentTab;
-            const { tag, tagId } = popupService;
-            setNoteAvailable(false);
-        } else {
-            setNotebookId(note.parent_id);
-            setNoteTitle(note.title);
-            setNoteContent(note.body);
-            setNoteAvailable(true);
-        }
-    }, [
-        popupService,
-        setNotebookId,
+export function EditorView() {
+    const {
+        notebooks,
+        noteId,
+        noteTitle,
+        noteAvailable,
+        noteContent,
+        notebookId,
+        upsertNote,
+        selectNotebook,
         setNoteTitle,
         setNoteContent,
-        setNoteAvailable,
-        joplinDataService,
-    ]);
+        onSearchClicked,
+    } = usePopupContext();
+    const textareaRef = useAutosize();
 
-    React.useEffect(() => {
-        load();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    const options = notebooks
+        .map((notebook) => {
+            const notebookTitle = padSpace(notebook.title, notebook.level);
+            return `<option value=${notebook.id}>${notebookTitle}</option>`;
+        })
+        .join("");
 
     return (
         <>
@@ -93,7 +60,7 @@ export function EditorView({ popupService, onSearchClicked }: Props) {
                 <a
                     id="search-link"
                     href="#"
-                    className="icon-button"
+                    className="text-[#212529] no-underline hover:text-[#7f212529] visited:text-[#7f212529] active:text-[#7f212529]"
                     onClick={(e) => {
                         e.preventDefault();
                         onSearchClicked();
@@ -110,20 +77,10 @@ export function EditorView({ popupService, onSearchClicked }: Props) {
                 className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 value={notebookId}
                 onChange={async (e) => {
-                    const newNotebookId = e.target.value;
-                    await upsertNote();
-                    await joplinDataService.putNoteParentId(
-                        noteId,
-                        newNotebookId,
-                    );
+                    selectNotebook(e.target.value);
                 }}
-            >
-                {notebooks.map((notebook) => (
-                    <option key={notebook.id} value={notebook.id}>
-                        {notebook.title}
-                    </option>
-                ))}
-            </select>
+                dangerouslySetInnerHTML={{ __html: options }}
+            />
 
             <input
                 className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
