@@ -48,6 +48,11 @@ export default [
             parser: typescriptParser,
             ecmaVersion: 13,
             sourceType: "module",
+            parserOptions: {
+                ecmaFeatures: {
+                    jsx: true,
+                },
+            },
         },
 
         rules: {
@@ -58,6 +63,17 @@ export default [
             "no-unused-vars": [
                 "warn",
                 { vars: "all", args: "after-used", ignoreRestSiblings: false },
+            ],
+            "@typescript-eslint/ban-ts-comment": "off",
+            "@typescript-eslint/no-explicit-any": "off",
+            "@typescript-eslint/no-use-client": "off",
+            "no-restricted-syntax": [
+                "off",
+                {
+                    selector:
+                        "ExpressionStatement > Literal[value='use client']",
+                    message: "'use client' directive is ignored.",
+                },
             ],
 
             "no-promise-executor-return": 0,

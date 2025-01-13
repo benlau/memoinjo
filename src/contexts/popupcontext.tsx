@@ -207,6 +207,7 @@ function useMakeContext() {
 
     const selectNotebook = React.useCallback(
         async (notebookId: string) => {
+            setNotebookId(notebookId);
             await upsertNote();
             await joplinDataService.putNoteParentId(noteId, notebookId);
         },
