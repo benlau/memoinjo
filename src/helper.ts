@@ -46,3 +46,26 @@ export async function sha256(message) {
 export async function urlToId(url) {
     return (await sha256(url)).slice(0, 32);
 }
+
+export function breakdownUrl(url: string): string[] {
+    const res = [] as string[];
+    res.push(normalizeLink(url));
+
+    const u = new URL(url);
+    u.hash = "";
+    u.search = "";
+    res.push(u.toString());
+    const { pathname } = u;
+    const tokens = pathname.split("/");
+    tokens.pop();
+
+    while (tokens.length > 0) {
+        u.pathname = tokens.join("/");
+        res.push(
+            tokens.length > 1 ? u.toString() : u.toString().replace(/\/$/, ""),
+        );
+        tokens.pop();
+    }
+
+    return [...new Set(res)];
+}

@@ -1,17 +1,23 @@
 import React from "react";
 import { Note } from "../services/joplindataservice";
 import { ArrowLeftIcon } from "@radix-ui/react-icons";
+import { EDITOR_VIEW, usePopupContext } from "../contexts/popupcontext";
 const MAX_NOTES = 50;
 
-export function SearchingView({ popupService, onBackClicked }) {
+export function SearchingView() {
     const [notes, setNotes] = React.useState<Note[]>([]);
     const [isLoading, setIsLoading] = React.useState(true);
+    const { currentTab, searchRelatedNotes, show } = usePopupContext();
+
+    const onBackClicked = React.useCallback(() => {
+        show(EDITOR_VIEW);
+    }, [show]);
 
     React.useEffect(() => {
         const loadNotes = async () => {
             setIsLoading(true);
-            const count = await popupService.searchRelatedNotes(
-                popupService.currentTab.url,
+            const count = await searchRelatedNotes(
+                currentTab?.url,
                 MAX_NOTES,
                 (foundNotes) => {
                     setNotes(foundNotes);
@@ -24,7 +30,8 @@ export function SearchingView({ popupService, onBackClicked }) {
         };
 
         loadNotes();
-    }, [popupService]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <div>

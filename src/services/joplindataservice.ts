@@ -21,10 +21,10 @@ export type Notebook = {
 };
 
 export default class JoplinDataService {
-    private apiToken: string | undefined;
-    private apiUrl: string;
-    private authToken: string | undefined;
-    private storageService: StorageService;
+    apiToken: string | undefined;
+    apiUrl: string;
+    authToken: string | undefined;
+    storageService: StorageService;
 
     constructor(storageService = new StorageService()) {
         this.apiToken = undefined;

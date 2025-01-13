@@ -9,22 +9,22 @@ const replace = require("@rollup/plugin-replace");
 const plugins = [
     resolve(),
     commonjs({
-        include: 'node_modules/**',
+        include: "node_modules/**",
         namedExports: {
-            'node_modules/react/index.js': [
-              'cloneElement',
-              'createContext',
-              'Component',
-              'createElement',
-              'forwardRef'
+            "node_modules/react/index.js": [
+                "cloneElement",
+                "createContext",
+                "Component",
+                "createElement",
+                "forwardRef",
             ],
-            'node_modules/react-dom/index.js': ['render', 'hydrate'],
-            'node_modules/react-is/index.js': [
-              'isElement',
-              'isValidElementType',
-              'ForwardRef'
-            ]
-          }        
+            "node_modules/react-dom/index.js": ["render", "hydrate"],
+            "node_modules/react-is/index.js": [
+                "isElement",
+                "isValidElementType",
+                "ForwardRef",
+            ],
+        },
     }),
     html({
         js: true,

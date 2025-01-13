@@ -13,11 +13,7 @@ import { SearchingView } from "./searchingview.js";
 import "./popup.css";
 
 export function PopupView() {
-    const { popupService, show, view, error } = usePopupContext();
-
-    const onBackClicked = React.useCallback(() => {
-        show(EDITOR_VIEW);
-    }, [show]);
+    const { view, error } = usePopupContext();
 
     return (
         <div id="popup">
@@ -64,15 +60,8 @@ export function PopupView() {
                     </div>
                 </>
             )}
-            {view === SEARCHING_VIEW && (
-                <SearchingView
-                    popupService={popupService}
-                    onBackClicked={onBackClicked}
-                />
-            )}
-            {view === EDITOR_VIEW && (
-                <EditorView/>
-            )}
+            {view === SEARCHING_VIEW && <SearchingView />}
+            {view === EDITOR_VIEW && <EditorView />}
             {view === ERROR_PANEL_VIEW && (
                 <>
                     <div id="error-view">

@@ -25,6 +25,7 @@ export default [
             "**/bower_components",
             "**/jest.config.js",
             "**/lib",
+            "**/globals.d.ts",
             "target/memoinjo-firefox/memoinjo",
             "target/memoinjo-chrome/memoinjo",
         ],
