@@ -2,6 +2,7 @@ import React from "react";
 import BrowserService from "../services/browserservice";
 import JoplinDataService, { Notebook } from "../services/joplindataservice";
 import { breakdownUrl, hasNoValue, hasValue, normalizeLink } from "../helper";
+import { Renderer } from "../utils/renderer";
 
 export const WIZARD_VIEW = "#wizard-view";
 export const JOPLIN_UNAVAILABLE_VIEW = "#joplin-web-clipper-error-view";
@@ -19,6 +20,7 @@ export type Tab = {
 function useMakeContext() {
     const joplinDataService = React.useMemo(() => new JoplinDataService(), []);
     const browserService = React.useMemo(() => new BrowserService(), []);
+    const renderer = React.useMemo(() => new Renderer(), []);
 
     const [view, setView] = React.useState(LOADING_VIEW);
     const [error, setError] = React.useState(null);
@@ -143,6 +145,7 @@ function useMakeContext() {
     React.useEffect(() => {
         const start = async () => {
             const { storageService } = joplinDataService;
+            renderer.template = await storageService.getTemplate();
 
             const [tab] = await browserService.queryTabs({
                 active: true,
@@ -183,10 +186,19 @@ function useMakeContext() {
                 setNoteId(newNoteId);
 
                 const note = await joplinDataService.getNote(newNoteId);
+
                 if (note == null) {
                     setNotebookId(selectedNotebookId);
                     setNoteTitle(title);
                     setNoteAvailable(false);
+                    setNoteContent(
+                        renderer.render({
+                            url: currentTab.url,
+                            tag: tag,
+                            tagId: tagId,
+                            title: title,
+                        }),
+                    );
                 } else {
                     setNotebookId(note.parent_id);
                     setNoteTitle(note.title);

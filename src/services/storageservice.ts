@@ -30,16 +30,17 @@ export default class StorageService {
         });
     }
 
-    async getTemplate() {
+    async getTemplate(): Promise<string> {
         return (
-            (await this.get(StorageService.Template)) ??
+            ((await this.get(StorageService.Template)) as string) ??
             Constants.DefaultTemplateValue
         );
     }
 
-    async getTag() {
+    async getTag(): Promise<string> {
         return (
-            (await this.get(StorageService.Tag)) ?? Constants.DefaultTagValue
+            ((await this.get(StorageService.Tag)) as string) ??
+            Constants.DefaultTagValue
         );
     }
 }
