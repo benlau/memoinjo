@@ -79,6 +79,14 @@ const plugins = [
                 dest: "dist/firefox",
             },
             {
+                src: "src/icon16.png",
+                dest: "dist/chrome/memoinjo",
+            },
+            {
+                src: "src/icon16.png",
+                dest: "dist/firefox/memoinjo",
+            },
+            {
                 src: "src/icon128.png",
                 dest: "dist/chrome/memoinjo",
             },

@@ -74,7 +74,7 @@ export const useDebouncer = (debounceTime: number) => {
     return debouncerRef.current;
 };
 
-export function useDebounceFunc<T>(
+export function useDebouncedFunc<T>(
     func: () => Promise<T>,
     debounceTime: number,
 ) {

@@ -9,6 +9,7 @@
         "default_popup": "popup/popup.html"
     },
     "icons": {
+        "16": "memoinjo/icon16.png",
         "128": "memoinjo/icon128.png"
     },
     "commands": {

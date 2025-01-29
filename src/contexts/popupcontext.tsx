@@ -4,7 +4,7 @@ import JoplinDataService, { Notebook } from "../services/joplindataservice";
 import { breakdownUrl, hasNoValue, hasValue, normalizeLink } from "../helper";
 import { Renderer } from "../utils/renderer";
 import { useStateRef } from "../hooks/stateref";
-import { AbortedError, useDebounceFunc } from "../hooks/debouncer";
+import { AbortedError, useDebouncedFunc } from "../hooks/debouncer";
 
 export const WIZARD_VIEW = "#wizard-view";
 export const JOPLIN_UNAVAILABLE_VIEW = "#joplin-web-clipper-error-view";
@@ -77,7 +77,7 @@ function useMakeContext() {
         tagIdRef,
     ]);
 
-    const debouncedUpsertNote = useDebounceFunc(_upsertNote, DEBOUNCE_TIME);
+    const debouncedUpsertNote = useDebouncedFunc(_upsertNote, DEBOUNCE_TIME);
     const upsertNote = React.useCallback(async () => {
         debouncedUpsertNote().catch((e) => {
             if (e instanceof AbortedError) {
