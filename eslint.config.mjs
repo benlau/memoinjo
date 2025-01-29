@@ -62,7 +62,13 @@ export default [
             "react-hooks/exhaustive-deps": "warn",
             "no-unused-vars": [
                 "warn",
-                { vars: "all", args: "after-used", ignoreRestSiblings: false },
+                {
+                    vars: "local",
+                    args: "after-used",
+                    ignoreRestSiblings: false,
+                    varsIgnorePattern: "^_",
+                    argsIgnorePattern: "^_",
+                },
             ],
             "@typescript-eslint/ban-ts-comment": "off",
             "@typescript-eslint/no-explicit-any": "off",

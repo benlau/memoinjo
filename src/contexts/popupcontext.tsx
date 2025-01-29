@@ -3,6 +3,8 @@ import BrowserService from "../services/browserservice";
 import JoplinDataService, { Notebook } from "../services/joplindataservice";
 import { breakdownUrl, hasNoValue, hasValue, normalizeLink } from "../helper";
 import { Renderer } from "../utils/renderer";
+import { useStateRef } from "../hooks/stateref";
+import { AbortedError, useDebounceFunc } from "../hooks/debouncer";
 
 export const WIZARD_VIEW = "#wizard-view";
 export const JOPLIN_UNAVAILABLE_VIEW = "#joplin-web-clipper-error-view";
@@ -17,6 +19,8 @@ export type Tab = {
     id: string;
 };
 
+const DEBOUNCE_TIME = 50;
+
 function useMakeContext() {
     const joplinDataService = React.useMemo(() => new JoplinDataService(), []);
     const browserService = React.useMemo(() => new BrowserService(), []);
@@ -25,16 +29,22 @@ function useMakeContext() {
     const [view, setView] = React.useState(LOADING_VIEW);
     const [error, setError] = React.useState(null);
     const [noteId, setNoteId] = React.useState("");
-    const [noteTitle, setNoteTitle] = React.useState("");
+    const [noteTitle, setNoteTitle, noteTitleRef] = useStateRef<string>("");
     const [noteAvailable, setNoteAvailable] = React.useState(false);
-    const [noteContent, setNoteContent] = React.useState("");
+    const [noteContent, setNoteContent, noteContentRef] =
+        useStateRef<string>("");
     const [notebookId, setNotebookId] = React.useState("");
     const [currentTab, setCurrentTab] = React.useState<Tab | null>(null);
     const [notebooks, setNotebooks] = React.useState<Notebook[]>([]);
-    const [selectedNotebookId, setSelectedNotebookId] = React.useState("");
-    const [tagId, setTagId] = React.useState("");
+    const [_selectedNotebookId, setSelectedNotebookId, selectedNotebookIdRef] =
+        useStateRef("");
+    const [_tagId, setTagId, tagIdRef] = useStateRef("");
 
-    const upsertNote = React.useCallback(async () => {
+    const _upsertNote = React.useCallback(async () => {
+        const noteTitle = noteTitleRef.current;
+        const noteContent = noteContentRef.current;
+        const tagId = tagIdRef.current;
+        const selectedNotebookId = selectedNotebookIdRef.current;
         if (noteAvailable) {
             await joplinDataService.putNoteTitleBody(
                 noteId,
@@ -59,13 +69,24 @@ function useMakeContext() {
         }
     }, [
         noteId,
-        noteTitle,
-        noteContent,
         noteAvailable,
-        selectedNotebookId,
-        tagId,
         joplinDataService,
+        selectedNotebookIdRef,
+        noteTitleRef,
+        noteContentRef,
+        tagIdRef,
     ]);
+
+    const debouncedUpsertNote = useDebounceFunc(_upsertNote, DEBOUNCE_TIME);
+    const upsertNote = React.useCallback(async () => {
+        debouncedUpsertNote().catch((e) => {
+            if (e instanceof AbortedError) {
+                return;
+            }
+            console.error(e);
+        });
+    }, [debouncedUpsertNote]);
+
     const searchRelatedNotes = React.useCallback(
         async (url, max, callback): Promise<number> => {
             const urls = breakdownUrl(url);
